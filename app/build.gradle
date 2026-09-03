@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'org.jetbrains.kotlin.android'
 
 android {
     namespace 'com.my.televip'
@@ -27,24 +28,40 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 
 }
 
 dependencies {
     implementation(libs.jcal)
+    compileOnly libs.libxposed.api
     compileOnly libs.api
     implementation(libs.gson)
     implementation(libs.appcompat)
     implementation(libs.material)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
+
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.ext.junit)
+    androidTestImplementation(libs.espresso.core)
 }
-tasks.register("copyLargestDexAsJava") {
+tasks.register("copyLargestDexToAssets") {
 
     dependsOn(":settingsadapter:assembleDebug")
 
     doLast {
-        def apkFile = fileTree("$rootDir/settingsadapter/build/intermediates/apk/debug")
-                .matching { include "*.apk" }
-                .singleFile
+        def apkFiles = fileTree("$rootDir/settingsadapter/build")
+                .matching { include "**/*.apk" }
+                .files
+
+        if (apkFiles.isEmpty()) {
+            throw new GradleException("No apk files found in settingsadapter/build!")
+        }
+
+        def apkFile = apkFiles.find { it.name.endsWith("-debug.apk") || it.name.endsWith(".apk") }
 
         def tempDir = new File(buildDir, "tmp/dexExtract")
         tempDir.mkdirs()
@@ -63,35 +80,17 @@ tasks.register("copyLargestDexAsJava") {
 
         def largestDex = dexFiles.max { it.length() }
 
-        // قراءة dex كـ bytes
-        byte[] dexBytes = largestDex.bytes
+        def assetsDir = file("$projectDir/src/main/assets")
+        assetsDir.mkdirs()
 
-        def hex = dexBytes.collect { String.format("%02X", it) }.join("")
-
-        def outputDir = file("$projectDir/src/main/java/com/my/televip/dex")
-        outputDir.mkdirs()
-
-        def javaFile = new File(outputDir, "DexHolder.java")
-
-        javaFile.text = """
-package com.my.televip.dex;
-
-public class DexHolder {
-    public static final byte[] DEX_BYTES = hexToBytes("${hex}");
-
-    private static byte[] hexToBytes(String hex) {
-        int len = hex.length();
-        byte[] data = new byte[len / 2];
-        for (int i = 0; i < len; i += 2) {
-            data[i / 2] = (byte) ((Character.digit(hex.charAt(i), 16) << 4)
-                                + Character.digit(hex.charAt(i+1), 16));
+        copy {
+            from largestDex
+            into assetsDir
+            rename { "settings_adapter.dex" }
         }
-        return data;
-    }
-}
-"""
-        println "Generated DexHolder with largest dex: ${largestDex.name}"
+
+        println "Copied largest dex (${largestDex.name}) to assets/settings_adapter.dex"
     }
 }
 
-preBuild.dependsOn("copyLargestDexAsJava")
+preBuild.dependsOn("copyLargestDexToAssets")

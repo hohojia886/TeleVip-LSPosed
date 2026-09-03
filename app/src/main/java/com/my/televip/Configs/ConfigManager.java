@@ -24,6 +24,7 @@ import com.my.televip.features.SecretMediaSave;
 import com.my.televip.features.ShowDeletedMessages;
 import com.my.televip.features.TelePremium;
 import com.my.televip.features.VoiceToMusicHook;
+import com.my.televip.features.base.FeatureRegistry;
 import com.my.televip.features.otherFeatures.AlwaysSaveMedia;
 import com.my.televip.features.otherFeatures.CopyNameHook;
 import com.my.televip.features.otherFeatures.EditOnlineTextView;
@@ -244,6 +245,12 @@ public class ConfigManager {
 
         items.add(shadows);
 
+        List<ConfigItem> customItems = FeatureRegistry.getConfigItems(context);
+        if (!customItems.isEmpty()) {
+            items.addAll(customItems);
+            items.add(shadows);
+        }
+
         btnChannel = new ConfigItem(ConfigItem.TEXT, Keys.DeveloperChannel);
         items.add(btnChannel);
 
@@ -276,6 +283,8 @@ public class ConfigManager {
             AlwaysSaveMedia.init();
 
             if (ClientChecker.check(ClientChecker.ClientType.Telegraph)) Telegraph.removeAd();
+
+            FeatureRegistry.initAll(context);
 
         } catch (Throwable e) {
             Logger.e(e);

@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.my.televip.Class.ClassLoad;
 import com.my.televip.Class.ClassNames;
 import com.my.televip.Drawable.ArrowDrawable;
-import com.my.televip.audio;
+import com.my.televip.AudioPlayer;
 import com.my.televip.base.AbstractMethodHook;
 import com.my.televip.dex.DexInjector;
 import com.my.televip.hooks.HMethod;
@@ -95,7 +95,7 @@ public class SettingsActivity {
     }
 
     public static void init(SettingsController settingsController) {
-        audio.init();
+        AudioPlayer.init();
         try {
             HMethod.hookMethod(ClassLoad.getClass(ClassNames.LAUNCH_ACTIVITY), "onBackPressed", new AbstractMethodHook() {
                 @Override

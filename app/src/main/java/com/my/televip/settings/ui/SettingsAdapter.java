@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.my.televip.Configs.ConfigItem;
 import com.my.televip.Configs.ConfigManager;
-import com.my.televip.audio;
+import com.my.televip.AudioPlayer;
 import com.my.televip.language.Keys;
 import com.my.televip.language.Translator;
 import com.my.televip.logging.Logger;
@@ -237,10 +237,10 @@ public class SettingsAdapter {
     }
 
     public static void playAudio(Context context) {
-        if (audio.playing) {
-            audio.stop();
+        if (AudioPlayer.isPlaying()) {
+            AudioPlayer.stop();
         } else {
-            audio.start();
+            AudioPlayer.start();
             DialogUtils.showQuranAlert(context);
         }
     }
