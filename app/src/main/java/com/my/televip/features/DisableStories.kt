@@ -35,20 +35,23 @@ object DisableStories {
                         }
                     )
 
-                    HMethod.hookMethod(
-                        messagesControllerClass,
-                        AutomationResolver.resolve("MessagesController", "storyEntitiesAllowed2", AutomationResolver.ResolverType.Method),
-                        *AutomationResolver.merge(
-                            AutomationResolver.resolveObject("storyEntitiesAllowed", arrayOf(ClassLoad.getClass(ClassNames.TLRPC_USER))),
-                            object : AbstractMethodHook() {
-                                override fun beforeMethod(param: MethodHookParam) {
-                                    if (ConfigManager.disableStories.isEnable) {
-                                        param.result = false
+                    val tlrpcUser = ClassLoad.getClass(ClassNames.TLRPC_USER)
+                    if (tlrpcUser != null) {
+                        HMethod.hookMethod(
+                            messagesControllerClass,
+                            AutomationResolver.resolve("MessagesController", "storyEntitiesAllowed2", AutomationResolver.ResolverType.Method),
+                            *AutomationResolver.merge(
+                                AutomationResolver.resolveObject("storyEntitiesAllowed", arrayOf(tlrpcUser)),
+                                object : AbstractMethodHook() {
+                                    override fun beforeMethod(param: MethodHookParam) {
+                                        if (ConfigManager.disableStories.isEnable) {
+                                            param.result = false
+                                        }
                                     }
                                 }
-                            }
+                            )
                         )
-                    )
+                    }
                 }
 
                 val storiesControllerClass = ClassLoad.getClass(ClassNames.STORIES_CONTROLLER)
@@ -57,7 +60,7 @@ object DisableStories {
                         HMethod.hookMethod(
                             storiesControllerClass,
                             AutomationResolver.resolve("StoriesController", "hasStories2", AutomationResolver.ResolverType.Method),
-                            Long::class.javaPrimitiveType,
+                            Long::class.javaPrimitiveType!!,
                             object : AbstractMethodHook() {
                                 override fun beforeMethod(param: MethodHookParam) {
                                     if (ConfigManager.disableStories.isEnable) {

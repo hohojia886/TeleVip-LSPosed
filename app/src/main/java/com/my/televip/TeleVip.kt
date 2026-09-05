@@ -20,7 +20,10 @@ object TeleVip {
             AutomationResolver.resolverRegistry.loadParameter()
             Translator.init()
             AndroidUtilities.init(context)
-            DexInjector.injectDex(context, Utils.classLoader)
+            val classLoader = Utils.classLoader
+            if (classLoader != null) {
+                DexInjector.injectDex(context, classLoader)
+            }
 
             val settingsController = SettingsController(context)
 

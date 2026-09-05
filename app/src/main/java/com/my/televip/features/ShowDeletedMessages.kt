@@ -61,7 +61,7 @@ object ShowDeletedMessages {
                 } else {
                     val methodName = methodNames[0]
 
-                    HMethod.hookMethod(messagesControllerClass, methodName, ArrayList::class.java, ArrayList::class.java, ArrayList::class.java, Boolean::class.javaPrimitiveType, Int::class.javaPrimitiveType, object : AbstractMethodHook() {
+                    HMethod.hookMethod(messagesControllerClass, methodName, ArrayList::class.java, ArrayList::class.java, ArrayList::class.java, Boolean::class.javaPrimitiveType!!, Int::class.javaPrimitiveType!!, object : AbstractMethodHook() {
                         override fun beforeMethod(param: MethodHookParam) {
                             try {
                                 val messagesController = MessagesController(param.thisObject)
@@ -132,20 +132,23 @@ object ShowDeletedMessages {
     fun initProcessing() {
         try {
             if (!isEnable.getAndSet(true)) {
-                HMethod.hookMethod(
-                    ClassLoad.getClass(ClassNames.MESSAGES_STORAGE),
-                    AutomationResolver.resolve("MessagesStorage", "markMessagesAsDeleted", AutomationResolver.ResolverType.Method),
-                    *AutomationResolver.merge(
-                        AutomationResolver.resolveObject("markMessagesAsDeleted", arrayOf(Long::class.javaPrimitiveType, ArrayList::class.java, Boolean::class.javaPrimitiveType, Boolean::class.javaPrimitiveType, Int::class.javaPrimitiveType, Int::class.javaPrimitiveType)),
-                        object : AbstractMethodHook() {
-                            override fun beforeMethod(param: MethodHookParam) {
-                                if (!isDeleteMessage.get()) {
-                                    param.result = null
+                val messagesStorageClass = ClassLoad.getClass(ClassNames.MESSAGES_STORAGE)
+                if (messagesStorageClass != null) {
+                    HMethod.hookMethod(
+                        messagesStorageClass,
+                        AutomationResolver.resolve("MessagesStorage", "markMessagesAsDeleted", AutomationResolver.ResolverType.Method),
+                        *AutomationResolver.merge(
+                            AutomationResolver.resolveObject("markMessagesAsDeleted", arrayOf<Class<*>>(Long::class.javaPrimitiveType!!, ArrayList::class.java, Boolean::class.javaPrimitiveType!!, Boolean::class.javaPrimitiveType!!, Int::class.javaPrimitiveType!!, Int::class.javaPrimitiveType!!)),
+                            object : AbstractMethodHook() {
+                                override fun beforeMethod(param: MethodHookParam) {
+                                    if (!isDeleteMessage.get()) {
+                                        param.result = null
+                                    }
                                 }
                             }
-                        }
+                        )
                     )
-                )
+                }
             }
 
             var removeDeletedMessagesFromNotifications: Method? = null
@@ -171,53 +174,61 @@ object ShowDeletedMessages {
                 })
             }
 
-            HMethod.hookMethod(
-                ClassLoad.getClass(ClassNames.MESSAGES_CONTROLLER),
-                AutomationResolver.resolve("MessagesController", "deleteMessages", AutomationResolver.ResolverType.Method),
-                *AutomationResolver.merge(
-                    AutomationResolver.resolveObject("deleteMessages", arrayOf(
-                        ArrayList::class.java,
-                        ArrayList::class.java,
-                        ClassLoad.getClass(ClassNames.TLRPC_ENCRYPTED_CHAT),
-                        Long::class.javaPrimitiveType,
-                        Boolean::class.javaPrimitiveType,
-                        Int::class.javaPrimitiveType,
-                        Boolean::class.javaPrimitiveType,
-                        Long::class.javaPrimitiveType,
-                        ClassLoad.getClass(ClassNames.TL_OBJECT),
-                        Int::class.javaPrimitiveType,
-                        Boolean::class.javaPrimitiveType,
-                        Int::class.javaPrimitiveType
-                    )),
-                    object : AbstractMethodHook() {
-                        override fun beforeMethod(param: MethodHookParam) {
-                            isDeleteMessage.set(true)
-                        }
-                    }
-                )
-            )
-
-            HMethod.hookMethod(
-                ClassLoad.getClass(ClassNames.NOTIFICATION_CENTER),
-                AutomationResolver.resolve("NotificationCenter", "postNotificationName", AutomationResolver.ResolverType.Method),
-                *AutomationResolver.merge(
-                    AutomationResolver.resolveObject("postNotificationName", arrayOf(Int::class.javaPrimitiveType, Array<Any>::class.java)),
-                    object : AbstractMethodHook() {
-                        override fun beforeMethod(param: MethodHookParam) {
-                            if (!isDeleteMessage.get()) {
-                                val id = param.args[0] as Int
-                                if (id == NotificationCenter.getMessagesDeleted()) {
-                                    param.result = null
-                                }
+            val messagesControllerClass = ClassLoad.getClass(ClassNames.MESSAGES_CONTROLLER)
+            val tlrpcEncryptedChat = ClassLoad.getClass(ClassNames.TLRPC_ENCRYPTED_CHAT)
+            val tlObject = ClassLoad.getClass(ClassNames.TL_OBJECT)
+            if (messagesControllerClass != null && tlrpcEncryptedChat != null && tlObject != null) {
+                HMethod.hookMethod(
+                    messagesControllerClass,
+                    AutomationResolver.resolve("MessagesController", "deleteMessages", AutomationResolver.ResolverType.Method),
+                    *AutomationResolver.merge(
+                        AutomationResolver.resolveObject("deleteMessages", arrayOf<Class<*>>(
+                            ArrayList::class.java,
+                            ArrayList::class.java,
+                            tlrpcEncryptedChat,
+                            Long::class.javaPrimitiveType!!,
+                            Boolean::class.javaPrimitiveType!!,
+                            Int::class.javaPrimitiveType!!,
+                            Boolean::class.javaPrimitiveType!!,
+                            Long::class.javaPrimitiveType!!,
+                            tlObject,
+                            Int::class.javaPrimitiveType!!,
+                            Boolean::class.javaPrimitiveType!!,
+                            Int::class.javaPrimitiveType!!
+                        )),
+                        object : AbstractMethodHook() {
+                            override fun beforeMethod(param: MethodHookParam) {
+                                isDeleteMessage.set(true)
                             }
                         }
-
-                        override fun afterMethod(param: MethodHookParam) {
-                            isDeleteMessage.set(false)
-                        }
-                    }
+                    )
                 )
-            )
+            }
+
+            val notificationCenterClass = ClassLoad.getClass(ClassNames.NOTIFICATION_CENTER)
+            if (notificationCenterClass != null) {
+                HMethod.hookMethod(
+                    notificationCenterClass,
+                    AutomationResolver.resolve("NotificationCenter", "postNotificationName", AutomationResolver.ResolverType.Method),
+                    *AutomationResolver.merge(
+                        AutomationResolver.resolveObject("postNotificationName", arrayOf<Class<*>>(Int::class.javaPrimitiveType!!, Array<Any>::class.java)),
+                        object : AbstractMethodHook() {
+                            override fun beforeMethod(param: MethodHookParam) {
+                                if (!isDeleteMessage.get()) {
+                                    val id = param.args[0] as Int
+                                    if (id == NotificationCenter.getMessagesDeleted()) {
+                                        param.result = null
+                                    }
+                                }
+                            }
+
+                            override fun afterMethod(param: MethodHookParam) {
+                                isDeleteMessage.set(false)
+                            }
+                        }
+                    )
+                )
+            }
 
             init()
         } catch (e: Throwable) {

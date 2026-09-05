@@ -42,15 +42,16 @@ object SaveEditsHistory {
                 messageDatabase = MessageDatabase(context)
 
                 val chatActivityClass = ClassLoad.getClass(ClassNames.CHAT_ACTIVITY)
-                if (chatActivityClass != null) {
+                val msgObjClass = ClassLoad.getClass(ClassNames.MESSAGE_OBJECT)
+                if (chatActivityClass != null && msgObjClass != null) {
                     HMethod.hookMethod(
                         chatActivityClass,
                         AutomationResolver.resolve("ChatActivity", "fillMessageMenu", AutomationResolver.ResolverType.Method),
                         *AutomationResolver.merge(
                             AutomationResolver.resolveObject(
                                 "fillMessageMenu",
-                                arrayOf(
-                                    ClassLoad.getClass(ClassNames.MESSAGE_OBJECT),
+                                arrayOf<Class<*>>(
+                                    msgObjClass,
                                     ArrayList::class.java,
                                     ArrayList::class.java,
                                     ArrayList::class.java
@@ -101,7 +102,7 @@ object SaveEditsHistory {
                         chatActivityClass,
                         AutomationResolver.resolve("ChatActivity", "processSelectedOption", AutomationResolver.ResolverType.Method),
                         *AutomationResolver.merge(
-                            AutomationResolver.resolveObject("processSelectedOption", arrayOf(Int::class.javaPrimitiveType)),
+                            AutomationResolver.resolveObject("processSelectedOption", arrayOf<Class<*>>(Int::class.javaPrimitiveType!!)),
                             object : AbstractMethodHook() {
                                 override fun beforeMethod(param: MethodHookParam) {
                                     if (ConfigManager.saveEditsHistory.isEnable) {
@@ -167,21 +168,22 @@ object SaveEditsHistory {
                 }
 
                 val messagesStorageClass = ClassLoad.getClass(ClassNames.MESSAGES_STORAGE)
-                if (messagesStorageClass != null) {
+                val tlMessagesMessages = ClassLoad.getClass(ClassNames.TL_MESSAGES_MESSAGES)
+                if (messagesStorageClass != null && tlMessagesMessages != null) {
                     HMethod.hookMethod(
                         messagesStorageClass,
                         AutomationResolver.resolve("MessagesStorage", "putMessages", AutomationResolver.ResolverType.Method),
                         *AutomationResolver.merge(
                             AutomationResolver.resolveObject(
                                 "putMessages",
-                                arrayOf(
-                                    ClassLoad.getClass(ClassNames.TL_MESSAGES_MESSAGES),
-                                    Long::class.javaPrimitiveType,
-                                    Int::class.javaPrimitiveType,
-                                    Int::class.javaPrimitiveType,
-                                    Boolean::class.javaPrimitiveType,
-                                    Int::class.javaPrimitiveType,
-                                    Long::class.javaPrimitiveType
+                                arrayOf<Class<*>>(
+                                    tlMessagesMessages,
+                                    Long::class.javaPrimitiveType!!,
+                                    Int::class.javaPrimitiveType!!,
+                                    Int::class.javaPrimitiveType!!,
+                                    Boolean::class.javaPrimitiveType!!,
+                                    Int::class.javaPrimitiveType!!,
+                                    Long::class.javaPrimitiveType!!
                                 )
                             ),
                             object : AbstractMethodHook() {

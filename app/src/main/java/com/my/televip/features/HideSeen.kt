@@ -215,7 +215,8 @@ object HideSeen {
             isReadMessages.set(true)
             getConnectionsManager().sendRequest(req, RequestDelegate.run { response, error ->
                 if (error == null) {
-                    if (ClassLoad.getClass(ClassNames.TL_MESSAGES_AFFECTED).isInstance(response)) {
+                    val affectedClass = ClassLoad.getClass(ClassNames.TL_MESSAGES_AFFECTED)
+                    if (affectedClass != null && affectedClass.isInstance(response)) {
                         val res = TLRPC.TL_messages_affectedMessages(response)
                         if (!ClientChecker.check(ClientChecker.ClientType.Nagram)) {
                             getMessagesController().processNewDifferenceParams(-1, res.pts, -1, res.ptsCount)
@@ -267,7 +268,11 @@ object HideSeen {
                 msgName = "TLRPC\$TL_messages_sendPaidReaction"
             if (objectClass == ClassLoad.getClass(AutomationResolver.resolve(ClassNames.TL_MESSAGES_SEND_MULTI_MEDIA)))
                 msgName = "TLRPC\$TL_messages_sendMultiMedia"
-            XposedHelpers.getObjectField(msg, AutomationResolver.resolve(msgName, "peer", AutomationResolver.ResolverType.Field))
+            if (msgName != null) {
+                XposedHelpers.getObjectField(msg, AutomationResolver.resolve(msgName, "peer", AutomationResolver.ResolverType.Field))
+            } else {
+                null
+            }
         } else {
             XposedHelpers.getObjectField(msg, "peer")
         }

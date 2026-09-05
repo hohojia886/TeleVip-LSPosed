@@ -21,12 +21,13 @@ object RemovesContentSaving {
                 isEnable = true
 
                 val messagesControllerClass = ClassLoad.getClass(ClassNames.MESSAGES_CONTROLLER)
-                if (messagesControllerClass != null) {
+                val tlrpcChatClass = ClassLoad.getClass(ClassNames.TLRPC_CHAT)
+                if (messagesControllerClass != null && tlrpcChatClass != null) {
                     HMethod.hookMethod(
                         messagesControllerClass,
                         AutomationResolver.resolve("MessagesController", "isChatNoForwards", AutomationResolver.ResolverType.Method),
                         *AutomationResolver.merge(
-                            AutomationResolver.resolveObject("isChatNoForwards", arrayOf(ClassLoad.getClass(ClassNames.TLRPC_CHAT))),
+                            AutomationResolver.resolveObject("isChatNoForwards", arrayOf(tlrpcChatClass)),
                             object : AbstractMethodHook() {
                                 override fun beforeMethod(param: MethodHookParam) {
                                     if (ConfigManager.removesContentSaving.isEnable) {

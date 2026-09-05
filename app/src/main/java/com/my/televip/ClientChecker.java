@@ -38,7 +38,8 @@ public class ClientChecker {
 
     public static boolean isTgnetObfuscated()
     {
-        return ClientType.fromPackage(Utils.pkgName).isTgnetObfuscated();
+        ClientType type = ClientType.fromPackage(Utils.pkgName);
+        return type != null && type.isTgnetObfuscated();
     }
 
     public enum ClientType {
