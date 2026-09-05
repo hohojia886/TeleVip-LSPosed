@@ -29,6 +29,15 @@ class MessageDatabase(context: Context) : SQLiteOpenHelper(context, getDataBaseP
         }
     }
 
+    override fun onConfigure(db: SQLiteDatabase) {
+        super.onConfigure(db)
+        try {
+            db.enableWriteAheadLogging()
+        } catch (t: Throwable) {
+            Logger.e(t)
+        }
+    }
+
     override fun onCreate(db: SQLiteDatabase) {
         val tableCreate = ("CREATE TABLE " + TABLE_MESSAGES + " ("
                 + COLUMN_ID + " LONG, "
@@ -70,7 +79,7 @@ class MessageDatabase(context: Context) : SQLiteOpenHelper(context, getDataBaseP
     fun searchMessage(id: Long, msgId: Int, message: String?): Boolean {
         if (message == null) return false
         return try {
-            val query = ("SELECT * FROM $TABLE_MESSAGES WHERE "
+            val query = ("SELECT 1 FROM $TABLE_MESSAGES WHERE "
                     + "$COLUMN_ID = ? AND $COLUMN_MSG_ID = ? AND $COLUMN_MESSAGE = ? LIMIT 1")
             readableDatabase.rawQuery(query, arrayOf(id.toString(), msgId.toString(), message)).use { cursor ->
                 cursor.count > 0
@@ -83,7 +92,7 @@ class MessageDatabase(context: Context) : SQLiteOpenHelper(context, getDataBaseP
 
     fun searchMessage(id: Long, msgId: Int): Boolean {
         return try {
-            val query = ("SELECT * FROM $TABLE_MESSAGES WHERE "
+            val query = ("SELECT 1 FROM $TABLE_MESSAGES WHERE "
                     + "$COLUMN_ID = ? AND $COLUMN_MSG_ID = ? LIMIT 1")
             readableDatabase.rawQuery(query, arrayOf(id.toString(), msgId.toString())).use { cursor ->
                 cursor.count > 0

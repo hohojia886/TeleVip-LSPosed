@@ -52,6 +52,9 @@ tasks.register("copyLargestDexToAssets") {
 
     dependsOn(":settingsadapter:assembleDebug")
 
+    inputs.files(fileTree("$rootDir/settingsadapter/src"))
+    outputs.file(file("$projectDir/src/main/assets/settings_adapter.dex"))
+
     doLast {
         def apkFiles = fileTree("$rootDir/settingsadapter/build")
                 .matching { include "**/*.apk" }

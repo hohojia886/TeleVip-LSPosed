@@ -5,14 +5,14 @@ import com.my.televip.logging.Logger;
 import com.my.televip.obfuscate.AutomationResolver;
 import com.my.televip.utils.Utils;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import de.robv.android.xposed.XposedHelpers;
 
 public class ClassLoad {
 
-    private static final Map<String, Class<?>> cache = new HashMap<>();
+    private static final Map<String, Class<?>> cache = new ConcurrentHashMap<>();
 
     public static Class<?> getClass(String name) {
         String resolved = AutomationResolver.resolve(name);

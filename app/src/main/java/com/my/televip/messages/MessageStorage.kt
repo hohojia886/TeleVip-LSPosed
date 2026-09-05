@@ -60,28 +60,33 @@ object MessageStorage {
                     val cursor = db.queryFinalized(query, arrayOf())
                     val state = db.executeFast(update)
 
-                    while (cursor.next()) {
-                        val data = cursor.byteBufferValue(0)
-                        val mid = cursor.intValue(1)
-                        val lastDialogId = cursor.longValue(2)
+                    try {
+                        while (cursor.next()) {
+                            val data = cursor.byteBufferValue(0)
+                            val mid = cursor.intValue(1)
+                            val lastDialogId = cursor.longValue(2)
 
-                        data.position(4)
-                        var flags = data.readInt32(true)
-                        flags = flags or ShowDeletedMessages.FLAG_DELETED
-                        data.position(4)
-                        data.writeInt32(flags)
-                        data.position(0)
+                            try {
+                                data.position(4)
+                                var flags = data.readInt32(true)
+                                flags = flags or ShowDeletedMessages.FLAG_DELETED
+                                data.position(4)
+                                data.writeInt32(flags)
+                                data.position(0)
 
-                        state.requery()
-                        state.bindByteBuffer(1, data)
-                        state.bindLong(2, lastDialogId)
-                        state.bindInteger(3, mid)
+                                state.requery()
+                                state.bindByteBuffer(1, data)
+                                state.bindLong(2, lastDialogId)
+                                state.bindInteger(3, mid)
+                                state.step()
+                            } finally {
+                                data.reuse()
+                            }
+                        }
+                    } finally {
+                        cursor.dispose()
                         state.step()
-
-                        data.reuse()
                     }
-                    cursor.dispose()
-                    state.step()
                 }
             } catch (e: Throwable) {
                 Logger.e(e)
