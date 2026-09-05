@@ -23,8 +23,9 @@ object AlwaysSaveMedia {
                         object : AbstractMethodHook() {
                             override fun afterMethod(param: MethodHookParam) {
                                 val photoViewer = PhotoViewer(param.thisObject)
-                                if (photoViewer.galleryButton != null) {
-                                    photoViewer.galleryButton.visibility = View.VISIBLE
+                                val btn = photoViewer.getGalleryButton()
+                                if (btn != null) {
+                                    btn.visibility = View.VISIBLE
                                 }
                             }
                         }

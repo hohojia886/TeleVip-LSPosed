@@ -86,32 +86,36 @@ object ShowDeletedMessages {
 
                                         if (updateDeleteChannelMessages) {
                                             val channelMessages = TLRPC.TL_updateDeleteChannelMessages(item)
-                                            val dialogMessage: LongSparseArray = messagesController.dialogMessage
-                                            val dialogMessages = Utils.castList(dialogMessage.get(-channelMessages.channelID), Any::class.java)
-                                            if (dialogMessages != null) {
+                                            val dialogMessage: LongSparseArray = messagesController.getDialogMessage()
+                                            val channelId = channelMessages.getChannelID()
+                                            val msgs = channelMessages.getMessages()
+                                            if (msgs != null) {
+                                                val dialogMessages = Utils.castList(dialogMessage.get(-channelId), Any::class.java)
                                                 for (msgObj in dialogMessages) {
-                                                    val owner = MessageObject(msgObj).messageOwner
-                                                    if (channelMessages.messages.contains(owner.id)) {
-                                                        owner.flags = owner.flags or FLAG_DELETED
+                                                    val owner = MessageObject(msgObj).getMessageOwner()
+                                                    if (msgs.contains(owner.getID())) {
+                                                        owner.setFlags(owner.getFlags() or FLAG_DELETED)
                                                     }
                                                 }
+                                                markMessagesDeletedForController(messagesController.getMessagesStorage(), -channelId, msgs)
                                             }
-                                            markMessagesDeletedForController(messagesController.messagesStorage, -channelMessages.channelID, channelMessages.messages)
                                         }
 
                                         if (updateDeleteMessages) {
-                                            val messages = TLRPC.TL_updateDeleteMessages(item).messages
-                                            val dialogMessages: SparseArray<*> = messagesController.dialogMessagesByIds
-                                            for (id in messages) {
-                                                val msgObj = dialogMessages.get(id)
-                                                if (msgObj == null) {
-                                                    break
-                                                } else {
-                                                    val owner = MessageObject(msgObj).messageOwner
-                                                    owner.flags = owner.flags or FLAG_DELETED
+                                            val messages = TLRPC.TL_updateDeleteMessages(item).getMessages()
+                                            if (messages != null) {
+                                                val dialogMessages: SparseArray<*> = messagesController.getDialogMessagesByIds()
+                                                for (id in messages) {
+                                                    val msgObj = dialogMessages.get(id)
+                                                    if (msgObj == null) {
+                                                        break
+                                                    } else {
+                                                        val owner = MessageObject(msgObj).getMessageOwner()
+                                                        owner.setFlags(owner.getFlags() or FLAG_DELETED)
+                                                    }
                                                 }
+                                                markMessagesDeletedForController(messagesController.getMessagesStorage(), 0, messages)
                                             }
-                                            markMessagesDeletedForController(messagesController.messagesStorage, 0, messages)
                                         }
                                     }
                                     param.args[0] = newUpdates

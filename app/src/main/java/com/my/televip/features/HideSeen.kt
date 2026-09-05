@@ -38,13 +38,13 @@ object HideSeen {
     fun sendFakeReadResponse(onCompleteOrig: Any?) {
         try {
             val fakeRes = TLRPC.TL_messages_affectedMessages()
-            fakeRes.pts = -1
-            fakeRes.ptsCount = 0
+            fakeRes.setPts(-1)
+            fakeRes.setPtsCount(0)
             val onComplete = RequestDelegate(onCompleteOrig)
             Utilities.getStageQueue().postRunnable {
                 try {
-                    if (onComplete.requestDelegate != null) {
-                        onComplete.run(fakeRes.tL_messages_affectedMessages, null)
+                    if (onComplete.requestDelegateObj != null) {
+                        onComplete.run(fakeRes.getTL_messages_affectedMessages(), null)
                     }
                 } catch (e: Throwable) {
                     Logger.e(e)
@@ -123,7 +123,7 @@ object HideSeen {
             }
             val peerObj = XposedHelpers.getObjectField(obj, AutomationResolver.resolve(objectName, "peer", AutomationResolver.ResolverType.Field))
             val inputPeer = TLRPC.InputPeer(peerObj)
-            val isChannelOrGroup = inputPeer.channel_id > 0 || inputPeer.chat_id > 0
+            val isChannelOrGroup = inputPeer.getChannel_id() > 0 || inputPeer.getChat_id() > 0
 
             if (privateHide && !channelHide) return !isChannelOrGroup
             if (channelHide && !privateHide) return isChannelOrGroup
@@ -167,7 +167,7 @@ object HideSeen {
         bgScope.launch {
             var maxVal = 0
             try {
-                val cursor = messagesStorage.database.queryFinalized("SELECT MAX(mid) FROM messages_v2 WHERE uid = $dialog_id", arrayOf())
+                val cursor = messagesStorage.getDatabase().queryFinalized("SELECT MAX(mid) FROM messages_v2 WHERE uid = $dialog_id", emptyArray<Any>())
                 if (cursor.next()) {
                     maxVal = cursor.intValue(0)
                 }
@@ -183,11 +183,14 @@ object HideSeen {
     fun markReadOnServer(messageId: Int, peer: TLRPC.InputPeer) {
         try {
             val req: Any?
-            val inputPeerChannel = if (ClientChecker.isTgnetObfuscated()) {
-                peer.inputPeer.javaClass.name == AutomationResolver.resolve(ClassNames.TL_INPUT_PEER_CHANNEL)
-            } else {
-                peer.inputPeer.javaClass.name.contains("TL_inputPeerChannel")
-            }
+            val ip = peer.inputPeer
+            val inputPeerChannel = if (ip != null) {
+                if (ClientChecker.isTgnetObfuscated()) {
+                    ip.javaClass.name == AutomationResolver.resolve(ClassNames.TL_INPUT_PEER_CHANNEL)
+                } else {
+                    ip.javaClass.name.contains("TL_inputPeerChannel")
+                }
+            } else false
 
             if (inputPeerChannel) {
                 val request: TLRPC.TL_channels_readHistory = if (!ClientChecker.check(ClientChecker.ClientType.Nagram)) {
@@ -200,7 +203,7 @@ object HideSeen {
                     }
                 }
                 request.setMax_id(messageId)
-                req = request.tL_channels_readHistory
+                req = request.getTL_channels_readHistory()
             } else {
                 val request: TLRPC.TL_messages_readHistory = if (!ClientChecker.check(ClientChecker.ClientType.Nagram)) {
                     TLRPC.TL_messages_readHistory()
@@ -209,7 +212,7 @@ object HideSeen {
                 }
                 request.setPeer(peer)
                 request.setMax_id(messageId)
-                req = request.tL_messages_readHistory
+                req = request.getTL_messages_readHistory()
             }
 
             isReadMessages.set(true)
@@ -219,9 +222,9 @@ object HideSeen {
                     if (affectedClass != null && affectedClass.isInstance(response)) {
                         val res = TLRPC.TL_messages_affectedMessages(response)
                         if (!ClientChecker.check(ClientChecker.ClientType.Nagram)) {
-                            getMessagesController().processNewDifferenceParams(-1, res.pts, -1, res.ptsCount)
+                            getMessagesController().processNewDifferenceParams(-1, res.getPts(), -1, res.getPtsCount())
                         } else {
-                            getMessagesController().processNewDifferenceParams(res.pts, -1, res.ptsCount)
+                            getMessagesController().processNewDifferenceParams(res.getPts(), -1, res.getPtsCount())
                         }
                     }
                 }
@@ -281,9 +284,9 @@ object HideSeen {
     @JvmStatic
     fun getDialogId(peer: TLRPC.InputPeer): Long {
         return when {
-            peer.chat_id != 0L -> -peer.chat_id
-            peer.channel_id != 0L -> -peer.channel_id
-            else -> peer.user_id
+            peer.getChat_id() != 0L -> -peer.getChat_id()
+            peer.getChannel_id() != 0L -> -peer.getChannel_id()
+            else -> peer.getUser_id()
         }
     }
 

@@ -55,10 +55,10 @@ object SecretMediaSave {
                                         if (ConfigManager.secretMediaSave.isEnable && param.args[0] != null) {
                                             val messageCell = ChatMessageCell(param.args[0])
                                             if (messageCell.chatMessageCell != null) {
-                                                val messageObject = messageCell.messageObject
+                                                val messageObject = messageCell.getMessageObject()
                                                 if (messageObject.messageObject != null) {
-                                                    val message = messageObject.messageOwner
-                                                    if (message.ttl > 0) message.setTtl(0)
+                                                    val message = messageObject.getMessageOwner()
+                                                    if (message.getTtl() > 0) message.setTtl(0)
                                                 }
                                                 bindPhotoViewerToActivity(messageCell)
                                             }
@@ -85,7 +85,7 @@ object SecretMediaSave {
                                     try {
                                         if (ConfigManager.secretMediaSave.isEnable && param.args[0] != null && pathImage != null) {
                                             val message = TLRPC.Message(param.args[0])
-                                            if (message.id.toLong() == id) {
+                                            if (message.getID().toLong() == id) {
                                                 param.result = pathImage
                                             }
                                         }

@@ -26,10 +26,10 @@ object HidePhone {
                             override fun beforeMethod(param: MethodHookParam) {
                                 if (ConfigManager.hidePhone.isEnable) {
                                     val userConfig = UserConfig(param.thisObject)
-                                    val user = userConfig.currentUser
+                                    val user = userConfig.getCurrentUser()
                                     if (user != null && user.user != null) {
-                                        if (user.phone != null) {
-                                            user.phone = null
+                                        if (user.getPhone() != null) {
+                                            user.setPhone(null)
                                         }
                                     }
                                 }

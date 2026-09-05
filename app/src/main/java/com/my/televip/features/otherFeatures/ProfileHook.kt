@@ -37,7 +37,7 @@ object ProfileHook {
                         override fun afterMethod(param: MethodHookParam) {
                             val profileActivity = ProfileActivity(param.thisObject)
                             if (getUserID(profileActivity) > 1) {
-                                val otherItem = profileActivity.otherItem
+                                val otherItem = profileActivity.getOtherItem()
                                 if (otherItem.actionBarMenuItem != null) {
                                     var drawableResource = 0x7f0806d3
                                     if (!ClientChecker.check(ClientChecker.ClientType.Nagram) && !ClientChecker.check(ClientChecker.ClientType.Momogram)) {
@@ -85,8 +85,8 @@ object ProfileHook {
     }
 
     private fun getUserID(profile: ProfileActivity): Long {
-        return if (profile.userId > 1) {
-            profile.userId
+        return if (profile.getUserId() > 1) {
+            profile.getUserId()
         } else {
             0L
         }

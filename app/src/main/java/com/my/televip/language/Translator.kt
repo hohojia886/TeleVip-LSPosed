@@ -60,7 +60,7 @@ object Translator {
     fun get(key: String): String {
         val controller = localeController ?: return key
         return try {
-            val currentLocale = controller.currentLocale ?: return key
+            val currentLocale = controller.getCurrentLocale() ?: return key
             val lang = currentLocale.language
             val langJson = langMap[lang]
             if (langJson != null && langJson.has(key)) {
@@ -82,7 +82,7 @@ object Translator {
     fun get(key: String, vararg args: Any): String {
         val controller = localeController ?: return key
         return try {
-            val currentLocale = controller.currentLocale ?: return key
+            val currentLocale = controller.getCurrentLocale() ?: return key
             val lang = currentLocale.language
             var text: String? = null
             val langJson = langMap[lang]

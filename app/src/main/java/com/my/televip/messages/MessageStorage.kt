@@ -50,14 +50,14 @@ object MessageStorage {
     fun markMessagesDeleted(messagesStorage: MessagesStorage, dialogId: Long, delMsg: ArrayList<Int>) {
         coroutineScope.launch {
             try {
-                val db = messagesStorage.database
+                val db = messagesStorage.getDatabase()
                 for (i in 0..1) {
                     val table = if (i == 0) "messages_v2" else "messages_topics"
                     val query = ("SELECT data,mid,uid FROM " + table + " WHERE "
                             + (if (dialogId == 0L) "is_channel" else "uid") + " = " + dialogId + " AND mid IN (" + TextUtils.join(",", delMsg) + ");")
                     val update = "UPDATE $table SET data = ? WHERE uid = ? AND mid = ?"
 
-                    val cursor = db.queryFinalized(query, arrayOf())
+                    val cursor = db.queryFinalized(query, emptyArray<Any>())
                     val state = db.executeFast(update)
 
                     try {

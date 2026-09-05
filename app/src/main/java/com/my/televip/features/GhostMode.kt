@@ -8,7 +8,6 @@ import com.my.televip.base.AbstractMethodHook
 import com.my.televip.hooks.HMethod
 import com.my.televip.logging.Logger
 import com.my.televip.obfuscate.AutomationResolver
-import de.robv.android.xposed.XposedBridge
 import de.robv.android.xposed.XposedHelpers
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -88,7 +87,7 @@ object GhostMode {
                                             HideSeen.handleReadAfterSend(reqObject)
                                         }
                                     } catch (e: Throwable) {
-                                        XposedBridge.log(e)
+                                        Logger.e(e)
                                     }
                                 }
                             })

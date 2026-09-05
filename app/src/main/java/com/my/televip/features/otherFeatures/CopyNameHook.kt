@@ -29,13 +29,13 @@ object CopyNameHook {
                         object : AbstractMethodHook() {
                             override fun afterMethod(param: MethodHookParam) {
                                 val profileActivity = ProfileActivity(param.thisObject)
-                                val nameTextViewArray = profileActivity.nameTextView
+                                val nameTextViewArray = profileActivity.getNameTextView()
                                 if (nameTextViewArray != null && nameTextViewArray.size > 1) {
                                     val simpleTextView = SimpleTextView(nameTextViewArray[1])
-                                    val view = simpleTextView.simpleTextView
+                                    val view = simpleTextView.getSimpleTextView()
                                     if (view != null) {
                                         view.setOnClickListener {
-                                            val text = simpleTextView.text
+                                            val text = simpleTextView.getText()
                                             if (text != null) {
                                                 val name = Translator.get(Keys.Copied, text)
                                                 val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager

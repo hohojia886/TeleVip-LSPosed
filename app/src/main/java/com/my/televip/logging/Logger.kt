@@ -1,6 +1,7 @@
 package com.my.televip.logging
 
 import android.os.Build
+import com.my.televip.BuildConfig
 import com.my.televip.application.ApplicationLoaderHook
 import com.my.televip.obfuscate.struct.ResolverRegistry
 import com.my.televip.utils.Utils
@@ -10,16 +11,21 @@ object Logger {
 
     @JvmStatic
     fun w(text: String) {
-        XposedBridge.log("[TeleVip] [Warning] pkgName: ${Utils.pkgName} $text")
+        if (BuildConfig.DEBUG) {
+            XposedBridge.log("[TeleVip] [Warning] pkgName: ${Utils.pkgName} $text")
+        }
     }
 
     @JvmStatic
     fun l(text: String) {
-        XposedBridge.log("[TeleVip] pkgName: ${Utils.pkgName} $text")
+        if (BuildConfig.DEBUG) {
+            XposedBridge.log("[TeleVip] pkgName: ${Utils.pkgName} $text")
+        }
     }
 
     @JvmStatic
     fun e(throwable: Throwable) {
+        if (!BuildConfig.DEBUG) return
         try {
             val log = StringBuilder().apply {
                 append("[TeleVip] [Error] pkgName: ").append(Utils.pkgName).append(" ").append(throwable).append("\n")

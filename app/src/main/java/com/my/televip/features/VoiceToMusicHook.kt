@@ -40,7 +40,7 @@ object VoiceToMusicHook {
                             override fun beforeMethod(param: MethodHookParam) {
                                 val messageObject = MessageObject(param.thisObject)
                                 stop = true
-                                if (messageObject.isVoice) param.result = true
+                                if (messageObject.isVoice()) param.result = true
                             }
                         }
                     )

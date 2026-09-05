@@ -31,13 +31,13 @@ class ListAdapter(
         return when (viewType) {
             1 -> {
                 val textCheckCell = Bridge.createTextCheckCell(MContext)
-                TextCheckCellHolder(textCheckCell.view, textCheckCell.textCell)
+                TextCheckCellHolder(textCheckCell.getView(), textCheckCell.textCell)
             }
             2 -> {
                 val textSettingsCell = Bridge.createTextSettingsCell(MContext)
-                TextSettingsCellHolder(textSettingsCell.view, textSettingsCell.textSettingsCell)
+                TextSettingsCellHolder(textSettingsCell.getView(), textSettingsCell.textSettingsCell)
             }
-            3 -> ShadowSectionCellHolder(ShadowSectionCell(MContext).view)
+            3 -> ShadowSectionCellHolder(ShadowSectionCell(MContext).getView())
             4 -> {
                 val textInfoCell = Bridge.createTextInfoCell(MContext)
                 TextInfoCellHolder(textInfoCell)
@@ -48,15 +48,15 @@ class ListAdapter(
             }
             else -> {
                 val headerCell = Bridge.createHeaderCell(MContext)
-                HeaderCellHolder(headerCell.view, headerCell.headerCell)
+                HeaderCellHolder(headerCell.getView(), headerCell.headerCell)
             }
         }
     }
 
-    class TextCheckCellHolder(view: View, @JvmField val textCheckCell: Any) : RecyclerView.ViewHolder(view)
-    class ExpandableTextCheckCellHolder(view: View, @JvmField val expandableTextCheckCell: Any) : RecyclerView.ViewHolder(view)
-    class HeaderCellHolder(view: View, @JvmField val headerCell: Any) : RecyclerView.ViewHolder(view)
-    class TextSettingsCellHolder(view: View, @JvmField val textSettingsCell: Any) : RecyclerView.ViewHolder(view)
+    class TextCheckCellHolder(view: View, @JvmField val textCheckCell: Any?) : RecyclerView.ViewHolder(view)
+    class ExpandableTextCheckCellHolder(view: View, @JvmField val expandableTextCheckCell: Any?) : RecyclerView.ViewHolder(view)
+    class HeaderCellHolder(view: View, @JvmField val headerCell: Any?) : RecyclerView.ViewHolder(view)
+    class TextSettingsCellHolder(view: View, @JvmField val textSettingsCell: Any?) : RecyclerView.ViewHolder(view)
     class ShadowSectionCellHolder(@JvmField val view: View) : RecyclerView.ViewHolder(view)
     class TextInfoCellHolder(@JvmField val view: View) : RecyclerView.ViewHolder(view)
 }

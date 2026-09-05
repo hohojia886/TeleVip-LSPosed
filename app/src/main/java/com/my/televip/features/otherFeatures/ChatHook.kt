@@ -41,7 +41,7 @@ object ChatHook {
                             override fun afterMethod(param: MethodHookParam) {
                                 try {
                                     val chatActivity = ChatActivity(param.thisObject)
-                                    val headerItem = chatActivity.headerItem
+                                    val headerItem = chatActivity.getHeaderItem()
                                     if (headerItem.actionBarMenuItem != null) {
                                         val drawableClass = ClassLoad.getClass(ClassNames.DRAWABLE)
                                         var drawableResource = XposedHelpers.getStaticIntField(drawableClass, "msg_go_up")

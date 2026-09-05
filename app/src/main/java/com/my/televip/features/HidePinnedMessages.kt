@@ -26,7 +26,7 @@ object HidePinnedMessages {
                         object : AbstractMethodHook() {
                             override fun afterMethod(param: MethodHookParam) {
                                 if (ConfigManager.hidePinnedMessages.isEnable) {
-                                    val button = ChatActivity(param.thisObject).pinnedMessageView
+                                    val button = ChatActivity(param.thisObject).getPinnedMessageView()
                                     if (button != null && button.visibility != View.GONE) {
                                         button.visibility = View.GONE
                                     }
@@ -42,7 +42,7 @@ object HidePinnedMessages {
                         object : AbstractMethodHook() {
                             override fun afterMethod(param: MethodHookParam) {
                                 if (ConfigManager.hidePinnedMessages.isEnable) {
-                                    val button = ChatActivity(param.thisObject).pinnedMessageView
+                                    val button = ChatActivity(param.thisObject).getPinnedMessageView()
                                     if (button != null && button.visibility != View.GONE) {
                                         button.visibility = View.GONE
                                     }

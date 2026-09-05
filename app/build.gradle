@@ -5,6 +5,10 @@ android {
     namespace 'com.my.televip'
     compileSdk 36
 
+    buildFeatures {
+        buildConfig true
+    }
+
     defaultConfig {
         applicationId "com.my.televip"
         minSdk 27

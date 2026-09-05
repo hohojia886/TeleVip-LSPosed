@@ -80,7 +80,7 @@ class SettingsHook {
                                     )
                                     for (i in arrayList.indices) {
                                         val item = UItem(arrayList[i])
-                                        if (item.text != null && item.subtext != null) {
+                                        if (item.getText() != null && item.getSubtext() != null) {
                                             arrayList.add(i, uItem)
                                             break
                                         }
@@ -102,7 +102,7 @@ class SettingsHook {
                         object : AbstractMethodHook() {
                             override fun afterMethod(param: MethodHookParam) {
                                 val uItem = UItem(param.args[0])
-                                if (uItem.getUItem() != null && uItem.id == 8353847) {
+                                if (uItem.getUItem() != null && uItem.getID() == 8353847) {
                                     settingsController.openView()
                                 }
                             }
@@ -131,7 +131,7 @@ class SettingsHook {
                         @Suppress("UNCHECKED_CAST")
                         override fun afterMethod(param: MethodHookParam) {
                             val drawerLayoutAdapter = DrawerLayoutAdapter(param.thisObject)
-                            val items = drawerLayoutAdapter.items
+                            val items = drawerLayoutAdapter.getItems()
                             if (itemConstructor == null) {
                                 val paramTypes = AutomationResolver.resolveObject("item", arrayOf<Class<*>>(Int::class.javaPrimitiveType!!, CharSequence::class.java, Int::class.javaPrimitiveType!!))
                                 itemConstructor = itemClass.getDeclaredConstructor(*paramTypes)

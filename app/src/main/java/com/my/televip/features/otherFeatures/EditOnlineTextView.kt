@@ -39,12 +39,12 @@ object EditOnlineTextView {
                             object : AbstractMethodHook() {
                                 override fun afterMethod(param: MethodHookParam) {
                                     val profileActivity = ProfileActivity(param.thisObject)
-                                    val onlineTextViewArray = profileActivity.onlineTextView
+                                    val onlineTextViewArray = profileActivity.getOnlineTextView()
                                     if (onlineTextViewArray != null && onlineTextViewArray.size > 1) {
                                         if (ConfigManager.hideOnline.isEnable) {
                                             val simpleTextView = SimpleTextView(onlineTextViewArray[1])
-                                            if (simpleTextView.simpleTextView != null) {
-                                                if (profileActivity.userId != 0L && profileActivity.userId == profileActivity.baseFragment.userConfig.clientUserId) {
+                                            if (simpleTextView.getSimpleTextView() != null) {
+                                                if (profileActivity.getUserId() != 0L && profileActivity.getUserId() == profileActivity.getBaseFragment().getUserConfig().getClientUserId()) {
                                                     simpleTextView.setText(Translator.get(Keys.UserOffline))
                                                 }
                                             }
@@ -52,8 +52,8 @@ object EditOnlineTextView {
 
                                         if (ConfigManager.showUserID.isEnable) {
                                             val simpleTextView2 = SimpleTextView(onlineTextViewArray[3])
-                                            if (simpleTextView2.simpleTextView != null) {
-                                                val oldText = simpleTextView2.text
+                                            if (simpleTextView2.getSimpleTextView() != null) {
+                                                val oldText = simpleTextView2.getText()
                                                 val sb = SpannableStringBuilder()
                                                 sb.append("\u200E")
                                                 sb.append("\u200F")
@@ -69,8 +69,8 @@ object EditOnlineTextView {
 
                                                 simpleTextView2.setMaxLines(2)
                                                 simpleTextView2.setText(sb, true)
-                                                simpleTextView2.simpleTextView.setOnClickListener {
-                                                    if (simpleTextView2.text != null) {
+                                                simpleTextView2.getSimpleTextView()?.setOnClickListener {
+                                                    if (simpleTextView2.getText() != null) {
                                                         val name = Translator.get(Keys.Copied, idStr)
                                                         val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                                                         clipboard.setPrimaryClip(ClipData.newPlainText("clipboard", idStr))
@@ -92,10 +92,10 @@ object EditOnlineTextView {
     }
 
     private fun getID(profile: ProfileActivity): Long {
-        return if (profile.userId > 1) {
-            profile.userId
+        return if (profile.getUserId() > 1) {
+            profile.getUserId()
         } else {
-            profile.chatId
+            profile.getChatId()
         }
     }
 }

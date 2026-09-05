@@ -21,6 +21,7 @@ import com.my.televip.virtuals.androidx.ViewHolder
 import com.my.televip.virtuals.messenger.browser.Browser
 import com.my.televip.virtuals.ui.Cells.ExpandableTextCheckCell
 import com.my.televip.virtuals.ui.Cells.HeaderCell
+import com.my.televip.virtuals.ui.Cells.ShadowSectionCell
 import com.my.televip.virtuals.ui.Cells.TextCheckCell
 import com.my.televip.virtuals.ui.Cells.TextInfoCell
 import com.my.televip.virtuals.ui.Cells.TextSettingsCell
@@ -77,10 +78,10 @@ object SettingsAdapter {
                             false
                         )
                     }
-                    val tv = textCheck.cell.textView
+                    val tv = textCheck.cell.getTextView()
                     tv.setLines(0)
                     tv.maxLines = 0
-                    tv.isSingleLine = false
+                    tv.setSingleLine(false)
                     tv.ellipsize = null
                 }
                 ConfigItem.EXPANDABLE_SWITCH -> {
@@ -99,7 +100,7 @@ object SettingsAdapter {
                         settingsCell.cell.setTextAndValue(Translator.get(key), calendarValue, false, false)
                     } else {
                         settingsCell.cell.setText(Translator.get(key), false)
-                        settingsCell.cell.textView.setTextColor(Theme.getTextBlueColor())
+                        settingsCell.cell.getTextView().setTextColor(Theme.getTextBlueColor())
                     }
                 }
                 ConfigItem.DIVIDER -> {
@@ -134,15 +135,16 @@ object SettingsAdapter {
             }
 
             val viewHolder = ViewHolder(holder)
-            viewHolder.itemView.setOnLongClickListener {
+            val view = viewHolder.getItemView()
+            view.setOnLongClickListener {
                 playAudio(settingsController.getContext())
                 true
             }
 
-            viewHolder.itemView.setOnClickListener {
+            view.setOnClickListener {
                 if (viewType == ConfigItem.SWITCH) {
                     val textCheck = TextCheckCellHolder(holder)
-                    val checked = !textCheck.cell.isChecked
+                    val checked = !textCheck.cell.isChecked()
                     textCheck.cell.setChecked(checked)
                     item.isEnable = checked
                     item.run()

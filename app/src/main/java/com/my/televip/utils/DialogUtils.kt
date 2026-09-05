@@ -34,7 +34,7 @@ object DialogUtils {
                 setTextAndValue(options[a], selected == a)
                 setOnClickListener { v ->
                     val sel = v.tag as Int
-                    builder.dismissRunnable?.run()
+                    builder.getDismissRunnable()?.run()
                     listener.onClick(null, sel)
                 }
             }
@@ -44,7 +44,7 @@ object DialogUtils {
         builder.setTitle(title)
         builder.setView(linearLayout)
         builder.setPositiveButton(Translator.get(Keys.Cancel), null)
-        return builder.create()
+        return builder.create()!!
     }
 
     @JvmStatic
