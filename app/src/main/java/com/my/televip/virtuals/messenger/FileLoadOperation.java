@@ -1,6 +1,7 @@
 package com.my.televip.virtuals.messenger;
 
-import com.my.televip.obfuscate.AutomationResolver;
+import com.my.televip.obfuscate.ArgsResolver;
+import com.my.televip.obfuscate.Obfuscate;
 
 import de.robv.android.xposed.XposedHelpers;
 
@@ -11,19 +12,19 @@ public class FileLoadOperation {
     public FileLoadOperation(Object fileOperation){ this.fileOperation = fileOperation; }
 
     public void setDownloadChunkSizeBig(int v){
-        XposedHelpers.setIntField(fileOperation, AutomationResolver.resolve("FileLoadOperation", "downloadChunkSizeBig", AutomationResolver.ResolverType.Field), v);
+        XposedHelpers.setIntField(fileOperation, Obfuscate.getFieldName("FileLoadOperation", "downloadChunkSizeBig"), v);
     }
 
     public void setMaxDownloadRequests(int v){
-        XposedHelpers.setIntField(fileOperation, AutomationResolver.resolve("FileLoadOperation", "maxDownloadRequests", AutomationResolver.ResolverType.Field), v);
+        XposedHelpers.setIntField(fileOperation, Obfuscate.getFieldName("FileLoadOperation", "maxDownloadRequests"), v);
     }
 
     public void setMaxDownloadRequestsBig(int v){
-        XposedHelpers.setIntField(fileOperation, AutomationResolver.resolve("FileLoadOperation", "maxDownloadRequestsBig", AutomationResolver.ResolverType.Field), v);
+        XposedHelpers.setIntField(fileOperation, Obfuscate.getFieldName("FileLoadOperation", "maxDownloadRequestsBig"), v);
     }
 
     public void setMaxCdnParts(int v){
-        XposedHelpers.setIntField(fileOperation, AutomationResolver.resolve("FileLoadOperation", "maxCdnParts", AutomationResolver.ResolverType.Field), v);
+        XposedHelpers.setIntField(fileOperation, Obfuscate.getFieldName("FileLoadOperation", "maxCdnParts"), v);
     }
 
 }

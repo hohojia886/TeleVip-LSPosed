@@ -4,9 +4,9 @@ import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
-import com.my.televip.Class.ClassNames;
 import com.my.televip.Class.ClassLoad;
-import com.my.televip.obfuscate.AutomationResolver;
+import com.my.televip.Class.ClassNames;
+import com.my.televip.obfuscate.Obfuscate;
 
 import de.robv.android.xposed.XposedHelpers;
 
@@ -27,15 +27,15 @@ public class TextSettingsCell {
     }
 
     public void setText(CharSequence text, boolean divider){
-        XposedHelpers.callMethod(textSettingsCell, AutomationResolver.resolve("TextSettingsCell","setText", AutomationResolver.ResolverType.Method), text, divider);
+        XposedHelpers.callMethod(textSettingsCell, Obfuscate.getMethodName("TextSettingsCell","setText"), text, divider);
     }
 
     public void setTextAndValue(CharSequence text, String value, boolean animated, boolean divider){
-        XposedHelpers.callMethod(textSettingsCell, AutomationResolver.resolve("TextSettingsCell","setTextAndValue", AutomationResolver.ResolverType.Method), text, value, animated, divider);
+        XposedHelpers.callMethod(textSettingsCell, Obfuscate.getMethodName("TextSettingsCell","setTextAndValue"), text, value, animated, divider);
     }
 
     public TextView getTextView(){
-        return (TextView) XposedHelpers.getObjectField(textSettingsCell,AutomationResolver.resolve("TextSettingsCell","textView", AutomationResolver.ResolverType.Field));
+        return (TextView) XposedHelpers.getObjectField(textSettingsCell,Obfuscate.getFieldName("TextSettingsCell","textView"));
     }
 
 }

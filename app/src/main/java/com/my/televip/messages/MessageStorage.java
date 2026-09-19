@@ -7,7 +7,7 @@ import android.os.Process;
 import android.text.TextUtils;
 
 import com.my.televip.application.ApplicationLoaderHook;
-import com.my.televip.features.ShowDeletedMessages;
+import com.my.televip.features.messages.ShowDeletedMessages;
 import com.my.televip.logging.Logger;
 import com.my.televip.virtuals.SQLite.SQLiteCursor;
 import com.my.televip.virtuals.SQLite.SQLiteDatabase;

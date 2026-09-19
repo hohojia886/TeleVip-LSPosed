@@ -6,7 +6,7 @@ import android.media.MediaPlayer;
 
 import java.io.IOException;
 
-public class audio {
+public class Audio {
 
     public static boolean playing = false;
     private static MediaPlayer mediaPlayer;

@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.my.televip.Class.ClassLoad;
 import com.my.televip.Class.ClassNames;
-import com.my.televip.obfuscate.AutomationResolver;
+import com.my.televip.obfuscate.Obfuscate;
 
 import de.robv.android.xposed.XposedHelpers;
 
@@ -16,7 +16,7 @@ public class ApplicationLoaderHook {
         if (applicationContext == null) {
             applicationContext = (Context) XposedHelpers.getStaticObjectField(
                     ClassLoad.getClass(ClassNames.APPLICATION_LOADER),
-                    AutomationResolver.resolve("ApplicationLoader", "applicationContext", AutomationResolver.ResolverType.Field)
+                    Obfuscate.getFieldName("ApplicationLoader", "applicationContext")
             );
         }
         return applicationContext;

@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.my.televip.application.AndroidUtilities;
-import com.my.televip.virtuals.Theme;
+import com.my.televip.ui.ThemeColors;
 
 public class MainToolBar extends LinearLayout {
 
@@ -44,7 +44,7 @@ public class MainToolBar extends LinearLayout {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 AndroidUtilities.dp(56) + statusBar));
 
-        this.setBackgroundColor(Theme.getToolBarColor());
+        this.setBackgroundColor(ThemeColors.getToolBarColor());
 
         this.setFitsSystemWindows(false);
         this.setGravity(Gravity.BOTTOM | Gravity.CENTER_VERTICAL);

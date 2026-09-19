@@ -2,7 +2,8 @@ package com.my.televip.virtuals.messenger;
 
 import com.my.televip.Class.ClassNames;
 import com.my.televip.Class.ClassLoad;
-import com.my.televip.obfuscate.AutomationResolver;
+import com.my.televip.obfuscate.ArgsResolver;
+import com.my.televip.obfuscate.Obfuscate;
 
 import java.io.File;
 
@@ -17,11 +18,11 @@ public class FileLoader {
     }
 
     public File getLocalFile(ImageLocation location) {
-        return (File) XposedHelpers.callMethod(fileLoader, AutomationResolver.resolve("FileLoader", "getLocalFile", AutomationResolver.ResolverType.Method), location.imageLocation);
+        return (File) XposedHelpers.callMethod(fileLoader, Obfuscate.getMethodName("FileLoader", "getLocalFile"), location.imageLocation);
     }
 
     public static FileLoader getInstance(int num) {
-        return new FileLoader(XposedHelpers.callStaticMethod(ClassLoad.getClass(ClassNames.FILE_LOADER), AutomationResolver.resolve("FileLoader", "getInstance", AutomationResolver.ResolverType.Method), num));
+        return new FileLoader(XposedHelpers.callStaticMethod(ClassLoad.getClass(ClassNames.FILE_LOADER), Obfuscate.getMethodName("FileLoader", "getInstance"), num));
     }
 
 }

@@ -2,9 +2,7 @@ package com.my.televip.virtuals.tgnet;
 
 import com.my.televip.Class.ClassLoad;
 import com.my.televip.Class.ClassNames;
-import com.my.televip.logging.Logger;
-import com.my.televip.obfuscate.AutomationResolver;
-import com.my.televip.utils.Utils;
+import com.my.televip.obfuscate.Obfuscate;
 
 import java.util.ArrayList;
 
@@ -12,19 +10,20 @@ import de.robv.android.xposed.XposedHelpers;
 
 public class TLRPC {
     public static class Peer {
-        private final Object peer;
+        final Object peer;
 
         public Peer(Object peer) {
             this.peer = peer;
         }
+
         public long getUser_id(){
-            return XposedHelpers.getLongField(peer, AutomationResolver.resolve("TLRPC$Peer", "user_id", AutomationResolver.ResolverType.Field));
+            return XposedHelpers.getLongField(peer, Obfuscate.getFieldName("TLRPC$Peer", "user_id"));
         }
         public long getChat_id(){
-            return XposedHelpers.getLongField(peer, AutomationResolver.resolve("TLRPC$Peer", "chat_id", AutomationResolver.ResolverType.Field));
+            return XposedHelpers.getLongField(peer, Obfuscate.getFieldName("TLRPC$Peer", "chat_id"));
         }
         public long getChannel_id(){
-            return XposedHelpers.getLongField(peer, AutomationResolver.resolve("TLRPC$Peer", "channel_id", AutomationResolver.ResolverType.Field));
+            return XposedHelpers.getLongField(peer, Obfuscate.getFieldName("TLRPC$Peer", "channel_id"));
         }
     }
 
@@ -36,11 +35,11 @@ public class TLRPC {
         }
 
         public String getPhone() {
-            return (String) XposedHelpers.getObjectField(user, AutomationResolver.resolve("TLRPC$User", "phone", AutomationResolver.ResolverType.Field));
+            return (String) XposedHelpers.getObjectField(user, Obfuscate.getFieldName("TLRPC$User", "phone"));
         }
 
         public void setPhone(String phone){
-            XposedHelpers.setObjectField(user, AutomationResolver.resolve("TLRPC$User", "phone", AutomationResolver.ResolverType.Field), phone);
+            XposedHelpers.setObjectField(user, Obfuscate.getFieldName("TLRPC$User", "phone"), phone);
         }
 
         public Object getUser(){
@@ -50,61 +49,90 @@ public class TLRPC {
     }
 
     public static class Message {
-        public final Object message;
+        private final Object message;
         private int id;
         public Message(Object message) {
             this.message = message;
         }
-        public int getID(){
+
+        public Message() {
+            this.message = XposedHelpers.newInstance(ClassLoad.getClass(ClassNames.MESSAGE));
+        }
+
+        //get
+        public int getId(){
             if (id == 0){
-                id = XposedHelpers.getIntField(message, AutomationResolver.resolve("TLRPC$Message", "id", AutomationResolver.ResolverType.Field));
+                id = XposedHelpers.getIntField(message, Obfuscate.getFieldName("TLRPC$Message", "id"));
             }
             return id;
         }
 
         public String getMessage(){
-            return (String) XposedHelpers.getObjectField(message, AutomationResolver.resolve("TLRPC$Message", "message", AutomationResolver.ResolverType.Field));
+            return (String) XposedHelpers.getObjectField(message, Obfuscate.getFieldName("TLRPC$Message", "message"));
         }
 
         public Peer getFrom_id(){
-            return new TLRPC.Peer(XposedHelpers.getObjectField(message, AutomationResolver.resolve("TLRPC$Message", "from_id", AutomationResolver.ResolverType.Field)));
+            return new TLRPC.Peer(XposedHelpers.getObjectField(message, Obfuscate.getFieldName("TLRPC$Message", "from_id")));
         }
 
         public int getFlags(){
-            return XposedHelpers.getIntField(message, AutomationResolver.resolve("TLRPC$Message", "flags", AutomationResolver.ResolverType.Field));
-        }
-        public void setFlags(int flags){
-            XposedHelpers.setIntField(message, AutomationResolver.resolve("TLRPC$Message", "flags", AutomationResolver.ResolverType.Field), flags);
+            return XposedHelpers.getIntField(message, Obfuscate.getFieldName("TLRPC$Message", "flags"));
         }
 
         public int getTtl(){
-            return XposedHelpers.getIntField(message, AutomationResolver.resolve("TLRPC$Message", "ttl", AutomationResolver.ResolverType.Field));
+            return XposedHelpers.getIntField(message, Obfuscate.getFieldName("TLRPC$Message", "ttl"));
         }
+
+        public Object get_Message(){
+            return message;
+        }
+
+        //set
+        public void setId(int id){
+            XposedHelpers.setIntField(message, Obfuscate.getFieldName("TLRPC$Message", "id"), id);
+            this.id = id;
+        }
+
+        public void setMessage(String msg){
+            XposedHelpers.setObjectField(message, Obfuscate.getFieldName("TLRPC$Message", "message"), msg);
+        }
+
+        public void setFlags(int flags){
+            XposedHelpers.setIntField(message, Obfuscate.getFieldName("TLRPC$Message", "flags"), flags);
+        }
+
         public void setTtl(Object ttl){
-            XposedHelpers.setObjectField(message, AutomationResolver.resolve("TLRPC$Message", "ttl", AutomationResolver.ResolverType.Field), ttl);
+            XposedHelpers.setObjectField(message, Obfuscate.getFieldName("TLRPC$Message", "ttl"), ttl);
         }
 
         public static Message TLdeserialize(NativeByteBuffer stream, int constructor, boolean exception){
-            return new Message(XposedHelpers.callStaticMethod(ClassLoad.getClass(ClassNames.TL_MESSAGE), AutomationResolver.resolve("TLRPC$Message", "TLdeserialize", AutomationResolver.ResolverType.Method), stream.nativeByteBuffer, constructor, exception));
+            return new Message(XposedHelpers.callStaticMethod(ClassLoad.getClass(ClassNames.MESSAGE), Obfuscate.getMethodName("TLRPC$Message", "TLdeserialize"), stream.nativeByteBuffer, constructor, exception));
         }
 
         public void readAttachPath(NativeByteBuffer stream, long currentUserId){
-            XposedHelpers.callMethod(message, AutomationResolver.resolve("TLRPC$Message", "readAttachPath", AutomationResolver.ResolverType.Method), stream.nativeByteBuffer, currentUserId);
+            XposedHelpers.callMethod(message, Obfuscate.getMethodName("TLRPC$Message", "readAttachPath"), stream.nativeByteBuffer, currentUserId);
         }
     }
+
     public static class InputPeer {
-        public final Object inputPeer;
+
+        private final Object inputPeer;
+
         public InputPeer(Object message) {
             this.inputPeer = message;
         }
         public long getUser_id(){
-            return XposedHelpers.getLongField(inputPeer, AutomationResolver.resolve("TLRPC$InputPeer", "user_id", AutomationResolver.ResolverType.Field));
+            return XposedHelpers.getLongField(inputPeer, Obfuscate.getFieldName("TLRPC$InputPeer", "user_id"));
         }
         public long getChat_id(){
-            return XposedHelpers.getLongField(inputPeer,AutomationResolver.resolve("TLRPC$InputPeer", "chat_id", AutomationResolver.ResolverType.Field));
+            return XposedHelpers.getLongField(inputPeer, Obfuscate.getFieldName("TLRPC$InputPeer", "chat_id"));
         }
         public long getChannel_id(){
-            return XposedHelpers.getLongField(inputPeer,AutomationResolver.resolve("TLRPC$InputPeer", "channel_id", AutomationResolver.ResolverType.Field));
+            return XposedHelpers.getLongField(inputPeer, Obfuscate.getFieldName("TLRPC$InputPeer", "channel_id"));
+        }
+
+        public Object getInputPeer() {
+            return inputPeer;
         }
 
     }
@@ -116,65 +144,37 @@ public class TLRPC {
             messages_Messages = messages;
         }
         public ArrayList<Object> getMessages(){
-            return (ArrayList<Object>) XposedHelpers.getObjectField(messages_Messages, AutomationResolver.resolve("TLRPC$messages_Messages", "messages", AutomationResolver.ResolverType.Field));
+            return (ArrayList<Object>) XposedHelpers.getObjectField(messages_Messages, Obfuscate.getFieldName("TLRPC$messages_Messages", "messages"));
         }
     }
 
     public static class TL_updateDeleteChannelMessages {
-        private final Object instance;
+        private final Object tl_updateDeleteChannelMessages;
 
         public TL_updateDeleteChannelMessages(Object instance)
         {
-            this.instance = instance;
+            this.tl_updateDeleteChannelMessages = instance;
         }
 
         public long getChannelID()
         {
-            try
-            {
-                return XposedHelpers.getLongField(this.instance,  AutomationResolver.resolve("TL_update$TL_updateDeleteChannelMessages", "channel_id", AutomationResolver.ResolverType.Field));
-            }
-            catch (Throwable e)
-            {
-                Logger.e(e);
-            }
-            return Long.MIN_VALUE;
+            return XposedHelpers.getLongField(tl_updateDeleteChannelMessages,  Obfuscate.getFieldName("TL_update$TL_updateDeleteChannelMessages", "channel_id"));
         }
 
-        public ArrayList<Integer> getMessages()
-        {
-            try
-            {
-
-                return Utils.castList(XposedHelpers.getObjectField(this.instance, AutomationResolver.resolve("TL_update$TL_updateDeleteChannelMessages", "messages", AutomationResolver.ResolverType.Field)), Integer.class);
-            }
-            catch (Throwable e)
-            {
-                Logger.e(e);
-            }
-            return null;
+        public ArrayList<Integer> getMessages() {
+            return (ArrayList<Integer>) XposedHelpers.getObjectField(tl_updateDeleteChannelMessages, Obfuscate.getFieldName("TL_update$TL_updateDeleteChannelMessages", "messages"));
         }
     }
 
     public static class TL_updateDeleteMessages {
-        private final Object instance;
+        private final Object tl_updateDeleteMessages;
 
-        public TL_updateDeleteMessages(Object instance)
-        {
-            this.instance = instance;
+        public TL_updateDeleteMessages(Object instance) {
+            this.tl_updateDeleteMessages = instance;
         }
 
-        public ArrayList<Integer> getMessages()
-        {
-            try
-            {
-                return Utils.castList(XposedHelpers.getObjectField(this.instance, AutomationResolver.resolve("TL_update$TL_updateDeleteMessages", "messages", AutomationResolver.ResolverType.Field)), Integer.class);
-            }
-            catch (Throwable e)
-            {
-                Logger.e(e);
-            }
-            return null;
+        public ArrayList<Integer> getMessages() {
+            return (ArrayList<Integer>) XposedHelpers.getObjectField(tl_updateDeleteMessages, Obfuscate.getFieldName("TL_update$TL_updateDeleteMessages", "messages"));
         }
     }
 
@@ -191,18 +191,18 @@ public class TLRPC {
         }
 
         public int getPts(){
-            return XposedHelpers.getIntField(instance, AutomationResolver.resolve("TLRPC$TL_messages_affectedMessages", "pts", AutomationResolver.ResolverType.Field));
+            return XposedHelpers.getIntField(instance, Obfuscate.getFieldName("TLRPC$TL_messages_affectedMessages", "pts"));
         }
 
         public int getPtsCount(){
-            return XposedHelpers.getIntField(instance, AutomationResolver.resolve("TLRPC$TL_messages_affectedMessages", "pts_count", AutomationResolver.ResolverType.Field));
+            return XposedHelpers.getIntField(instance, Obfuscate.getFieldName("TLRPC$TL_messages_affectedMessages", "pts_count"));
         }
         public void setPts(int pts){
-            XposedHelpers.setIntField(instance, AutomationResolver.resolve("TLRPC$TL_messages_affectedMessages", "pts", AutomationResolver.ResolverType.Field), pts);
+            XposedHelpers.setIntField(instance, Obfuscate.getFieldName("TLRPC$TL_messages_affectedMessages", "pts"), pts);
         }
 
         public void setPtsCount(int pts_count){
-            XposedHelpers.setIntField(instance, AutomationResolver.resolve("TLRPC$TL_messages_affectedMessages", "pts_count", AutomationResolver.ResolverType.Field), pts_count);
+            XposedHelpers.setIntField(instance, Obfuscate.getFieldName("TLRPC$TL_messages_affectedMessages", "pts_count"), pts_count);
         }
 
         public Object getTL_messages_affectedMessages(){
@@ -224,11 +224,11 @@ public class TLRPC {
         }
 
         public void setChannel(Object channel){
-            XposedHelpers.setObjectField(instance, AutomationResolver.resolve("TLRPC$TL_channels_readHistory", "channel", AutomationResolver.ResolverType.Field), channel);
+            XposedHelpers.setObjectField(instance, Obfuscate.getFieldName("TLRPC$TL_channels_readHistory", "channel"), channel);
         }
 
         public void setMax_id(int max_id){
-            XposedHelpers.setIntField(instance, AutomationResolver.resolve("TLRPC$TL_channels_readHistory", "max_id", AutomationResolver.ResolverType.Field), max_id);
+            XposedHelpers.setIntField(instance, Obfuscate.getFieldName("TLRPC$TL_channels_readHistory", "max_id"), max_id);
         }
 
         public Object getTL_channels_readHistory(){
@@ -250,11 +250,11 @@ public class TLRPC {
         }
 
         public void setPeer(InputPeer peer){
-            XposedHelpers.setObjectField(instance, AutomationResolver.resolve("TLRPC$TL_messages_readHistory", "peer", AutomationResolver.ResolverType.Field), peer.inputPeer);
+            XposedHelpers.setObjectField(instance, Obfuscate.getFieldName("TLRPC$TL_messages_readHistory", "peer"), peer.inputPeer);
         }
 
         public void setMax_id(int max_id){
-            XposedHelpers.setIntField(instance, AutomationResolver.resolve("TLRPC$TL_messages_readHistory", "max_id", AutomationResolver.ResolverType.Field), max_id);
+            XposedHelpers.setIntField(instance, Obfuscate.getFieldName("TLRPC$TL_messages_readHistory", "max_id"), max_id);
         }
 
         public Object getTL_messages_readHistory(){

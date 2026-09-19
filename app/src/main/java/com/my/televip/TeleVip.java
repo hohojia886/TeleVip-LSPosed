@@ -1,8 +1,6 @@
 package com.my.televip;
 
-import static com.my.televip.obfuscate.AutomationResolver.resolverRegistry;
-
-import android.content.Context;
+import static com.my.televip.obfuscate.ArgsResolver.resolverRegistry;
 
 import com.my.televip.Configs.ConfigManager;
 import com.my.televip.application.AndroidUtilities;
@@ -16,17 +14,17 @@ import com.my.televip.virtuals.TeleVip.Bridge.Bridge;
 
 public class TeleVip {
     
-    public static void startHook(Context context) {
+    public static void startHook() {
         try {
             resolverRegistry.loadParameter();
             Translator.init();
-            AndroidUtilities.init(context);
+            AndroidUtilities.init();
             DexInjector.injectDex(Utils.classLoader);
 
-            SettingsController settingsController = new SettingsController(context);
+            SettingsController settingsController = new SettingsController();
 
             Bridge.init(settingsController);
-            ConfigManager.loadAndRead(context);
+            ConfigManager.loadAndRead();
             SettingsManager.init(settingsController);
 
         } catch (Throwable e){

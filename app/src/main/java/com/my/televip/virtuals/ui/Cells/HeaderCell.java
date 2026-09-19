@@ -5,7 +5,7 @@ import android.view.View;
 
 import com.my.televip.Class.ClassLoad;
 import com.my.televip.Class.ClassNames;
-import com.my.televip.obfuscate.AutomationResolver;
+import com.my.televip.obfuscate.Obfuscate;
 
 import de.robv.android.xposed.XposedHelpers;
 
@@ -26,7 +26,7 @@ public class HeaderCell {
     }
 
     public void setText(CharSequence text){
-        XposedHelpers.callMethod(headerCell, AutomationResolver.resolve("HeaderCell","setText", AutomationResolver.ResolverType.Method), text);
+        XposedHelpers.callMethod(headerCell, Obfuscate.getMethodName("HeaderCell","setText"), text);
     }
 
 }

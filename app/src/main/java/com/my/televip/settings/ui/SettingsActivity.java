@@ -10,19 +10,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.my.televip.Class.ClassLoad;
 import com.my.televip.Class.ClassNames;
 import com.my.televip.Drawable.ArrowDrawable;
-import com.my.televip.audio;
-import com.my.televip.base.AbstractMethodHook;
+import com.my.televip.Audio;
+import com.my.televip.base.BaseMethodHook;
 import com.my.televip.dex.DexInjector;
 import com.my.televip.hooks.HMethod;
 import com.my.televip.language.Keys;
 import com.my.televip.language.Translator;
 import com.my.televip.logging.Logger;
-import com.my.televip.obfuscate.AutomationResolver;
+import com.my.televip.obfuscate.Obfuscate;
 import com.my.televip.settings.adapter.ListAdapter;
 import com.my.televip.settings.controller.SettingsController;
+import com.my.televip.ui.ThemeColors;
 import com.my.televip.ui.toolBar.MainToolBar;
 import com.my.televip.virtuals.TeleVip.Bridge.Bridge;
-import com.my.televip.virtuals.Theme;
 import com.my.televip.virtuals.ui.Components.RecyclerListView;
 
 import de.robv.android.xposed.XposedHelpers;
@@ -42,12 +42,12 @@ public class SettingsActivity {
 
         try {
             layout.setOrientation(LinearLayout.VERTICAL);
-            layout.setBackgroundColor(Theme.getBackgroundGrayColor());
+            layout.setBackgroundColor(ThemeColors.getBackgroundGrayColor());
 
             MainToolBar toolbar = new MainToolBar(context);
 
-            toolbar.setColorTitle(Theme.getTextToolBarColor());
-            toolbar.setRippleColor(Theme.getToolBarRippleColor());
+            toolbar.setColorTitle(ThemeColors.getTextToolBarColor());
+            toolbar.setRippleColor(ThemeColors.getToolBarRippleColor());
             toolbar.setTextTitle(Translator.get(Keys.GhostMode));
 
             ArrowDrawable arrow = new ArrowDrawable();
@@ -69,7 +69,7 @@ public class SettingsActivity {
                 listView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
             }
 
-            listView.setBackgroundColor(Theme.getBackgroundWhiteOrBlueColor());
+            listView.setBackgroundColor(ThemeColors.getBackgroundWhiteOrBlueColor());
 
             listView.setVerticalScrollBarEnabled(false);
 
@@ -95,9 +95,9 @@ public class SettingsActivity {
     }
 
     public static void init(SettingsController settingsController) {
-        audio.init();
+        Audio.init();
         try {
-            HMethod.hookMethod(ClassLoad.getClass(ClassNames.LAUNCH_ACTIVITY), "onBackPressed", new AbstractMethodHook() {
+            HMethod.hookMethod(ClassLoad.getClass(ClassNames.LAUNCH_ACTIVITY), "onBackPressed", new BaseMethodHook() {
                 @Override
                 protected void beforeMethod(MethodHookParam param) {
                     if (isSettings) {
@@ -108,7 +108,7 @@ public class SettingsActivity {
                 }
             });
 
-            HMethod.hookMethod(ClassLoad.getClass(ClassNames.ANDROID_UTILITIES), AutomationResolver.resolve("AndroidUtilities", "isTabletInternal", AutomationResolver.ResolverType.Method), new AbstractMethodHook() {
+            HMethod.hookMethod(ClassLoad.getClass(ClassNames.ANDROID_UTILITIES), Obfuscate.getMethodName("AndroidUtilities", "isTabletInternal"), new BaseMethodHook() {
                 @Override
                 protected void beforeMethod(MethodHookParam param) {
                     if (isSettings) {

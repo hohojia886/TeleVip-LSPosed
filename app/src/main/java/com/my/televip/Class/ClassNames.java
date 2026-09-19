@@ -1,7 +1,6 @@
 package com.my.televip.Class;
 
 public class ClassNames {
-
     public static final String MESSAGE_OBJECT = "org.telegram.messenger.MessageObject";
     public static final String CHAT_ACTIVITY = "org.telegram.ui.ChatActivity";
     public static final String PROFILE_ACTIVITY = "org.telegram.ui.ProfileActivity";
@@ -31,7 +30,7 @@ public class ClassNames {
     public static final String WRITE_TO_SOCKET_DELEGATE = "org.telegram.tgnet.WriteToSocketDelegate";
     public static final String TL_HELP_APP_UPDATE = "org.telegram.tgnet.TLRPC$TL_help_appUpdate";
     public static final String CHAT_MESSAGE_CELL = "org.telegram.ui.Cells.ChatMessageCell";
-    public static final String TL_MESSAGE = "org.telegram.tgnet.TLRPC$Message";
+    public static final String MESSAGE = "org.telegram.tgnet.TLRPC$Message";
     public static final String SECRET_MEDIA_VIEWER = "org.telegram.ui.SecretMediaViewer";
     public static final String PHOTO_VIEWER = "org.telegram.ui.PhotoViewer";
     public static final String PHOTO_VIEWER_PROVIDER = "org.telegram.ui.PhotoViewer$PhotoViewerProvider";
@@ -76,4 +75,5 @@ public class ClassNames {
     public static final String TL_MESSAGES_SET_ENCRYPTED_TYPING = "org.telegram.tgnet.TLRPC$TL_messages_setEncryptedTyping";
     public static final String TL_STORIES_READ_STORIES = "org.telegram.tgnet.tl.TL_stories$TL_stories_readStories";
     public static final String TL_STORIES_INCREMENT_STORY_VIEWS = "org.telegram.tgnet.tl.TL_stories$TL_stories_incrementStoryViews";
-}
+    public static final String LONG_SPARES_ARRAY = "androidx.collection.LongSparseArray";
+   }

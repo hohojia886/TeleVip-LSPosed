@@ -6,7 +6,8 @@ import android.os.Bundle;
 
 import com.my.televip.Class.ClassLoad;
 import com.my.televip.Class.ClassNames;
-import com.my.televip.base.AbstractMethodHook;
+import com.my.televip.Clients.ClientManager;
+import com.my.televip.base.BaseMethodHook;
 import com.my.televip.hooks.HMethod;
 import com.my.televip.utils.Utils;
 
@@ -23,19 +24,17 @@ public class MainHook implements IXposedHookLoadPackage, IXposedHookZygoteInit {
 
     @Override
     public void handleLoadPackage(final XC_LoadPackage.LoadPackageParam lpparam) {
-        if (!ClientChecker.ClientType.containsPackage(lpparam.packageName)) {
-            return;
-        }
-        Utils.pkgName = lpparam.packageName;
+        if (!ClientManager.containsPackage(lpparam.packageName, lpparam.classLoader)) return;
+
         Utils.classLoader = lpparam.classLoader;
+        Utils.pkgName = lpparam.packageName;
 
-
-        HMethod.hookMethod(ClassLoad.getClass(ClassNames.LAUNCH_ACTIVITY), "onCreate", Bundle.class, new AbstractMethodHook() {
+        HMethod.hookMethod(ClassLoad.getClass(ClassNames.LAUNCH_ACTIVITY), "onCreate", Bundle.class, new BaseMethodHook() {
             @Override
             protected void beforeMethod(MethodHookParam param) {
-                Activity launchActivity = (Activity) param.thisObject;
+                Utils.setCurrentActivity((Activity) param.thisObject);
                 if (!isStart) {
-                    TeleVip.startHook(launchActivity);
+                    TeleVip.startHook();
                     isStart = true;
                 }
             }

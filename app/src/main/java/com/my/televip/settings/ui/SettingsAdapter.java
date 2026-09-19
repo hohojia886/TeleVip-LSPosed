@@ -10,20 +10,20 @@ import android.widget.TextView;
 
 import com.my.televip.Configs.ConfigItem;
 import com.my.televip.Configs.ConfigManager;
-import com.my.televip.audio;
+import com.my.televip.Audio;
 import com.my.televip.language.Keys;
 import com.my.televip.language.Translator;
 import com.my.televip.logging.Logger;
 import com.my.televip.settings.controller.SettingsController;
+import com.my.televip.ui.ThemeColors;
 import com.my.televip.utils.DialogUtils;
 import com.my.televip.utils.Utils;
-import com.my.televip.virtuals.Theme;
 import com.my.televip.virtuals.androidx.ViewHolder;
 import com.my.televip.virtuals.messenger.browser.Browser;
-import com.my.televip.virtuals.ui.Cells.ExpandableTextCheckCell;
+import com.my.televip.ui.Cells.ExpandableTextCheckCell;
 import com.my.televip.virtuals.ui.Cells.HeaderCell;
 import com.my.televip.virtuals.ui.Cells.TextCheckCell;
-import com.my.televip.virtuals.ui.Cells.TextInfoCell;
+import com.my.televip.ui.Cells.TextInfoCell;
 import com.my.televip.virtuals.ui.Cells.TextSettingsCell;
 
 import de.robv.android.xposed.XposedHelpers;
@@ -101,12 +101,12 @@ public class SettingsAdapter {
                         settingsCell.cell.setTextAndValue(Translator.get(item.getKey()), value, false, false);
                     } else {
                         settingsCell.cell.setText(Translator.get(item.getKey()), false);
-                        settingsCell.cell.getTextView().setTextColor(Theme.getTextBlueColor());
+                        settingsCell.cell.getTextView().setTextColor(ThemeColors.getTextBlueColor());
                     }
                     break;
                 case ConfigItem.DIVIDER:
                     ShadowSectionCellHolder shadowSectionCell = new ShadowSectionCellHolder(holder);
-                    shadowSectionCell.cell.setBackgroundColor((Theme.getBackgroundGrayColor()));
+                    shadowSectionCell.cell.setBackgroundColor((ThemeColors.getBackgroundGrayColor()));
                     break;
                 case ConfigItem.INFO:
                     TextInfoCellHolder textInfoCell = new TextInfoCellHolder(holder);
@@ -151,8 +151,8 @@ public class SettingsAdapter {
                 } else if (viewType == ConfigItem.TEXT) {
                     switch (item.getKey()) {
                         case Keys.DeveloperChannel:
-                            Browser.openUrl(settingsController.getContext(), "https://t.me/t_l0_e");
                             settingsController.hide();
+                            Browser.openUrl(settingsController.getContext(), "https://t.me/t_l0_e");
                             break;
                         case Keys.RestartApp:
                             Intent intent = settingsController.getContext()
@@ -237,10 +237,10 @@ public class SettingsAdapter {
     }
 
     public static void playAudio(Context context) {
-        if (audio.playing) {
-            audio.stop();
+        if (Audio.playing) {
+            Audio.stop();
         } else {
-            audio.start();
+            Audio.start();
             DialogUtils.showQuranAlert(context);
         }
     }

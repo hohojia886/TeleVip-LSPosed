@@ -2,7 +2,8 @@ package com.my.televip.virtuals.tgnet;
 
 import com.my.televip.Class.ClassLoad;
 import com.my.televip.Class.ClassNames;
-import com.my.televip.obfuscate.AutomationResolver;
+import com.my.televip.obfuscate.ArgsResolver;
+import com.my.televip.obfuscate.Obfuscate;
 
 import de.robv.android.xposed.XposedHelpers;
 
@@ -18,19 +19,19 @@ public class NativeByteBuffer {
     }
 
     public void reuse(){
-        XposedHelpers.callMethod(nativeByteBuffer, AutomationResolver.resolve("NativeByteBuffer", "reuse", AutomationResolver.ResolverType.Method));
+        XposedHelpers.callMethod(nativeByteBuffer, Obfuscate.getMethodName("NativeByteBuffer", "reuse"));
     }
 
     public int readInt32(boolean exception) {
-        return (int) XposedHelpers.callMethod(nativeByteBuffer, AutomationResolver.resolve("NativeByteBuffer","readInt32", AutomationResolver.ResolverType.Method), exception);
+        return (int) XposedHelpers.callMethod(nativeByteBuffer, Obfuscate.getMethodName("NativeByteBuffer","readInt32"), exception);
     }
 
     public void position(int i) {
-        XposedHelpers.callMethod(nativeByteBuffer, AutomationResolver.resolve("NativeByteBuffer","position", AutomationResolver.ResolverType.Method), i);
+        XposedHelpers.callMethod(nativeByteBuffer, Obfuscate.getMethodName("NativeByteBuffer","position"), i);
     }
 
     public void writeInt32(int i) {
-        XposedHelpers.callMethod(nativeByteBuffer, AutomationResolver.resolve("NativeByteBuffer","writeInt32", AutomationResolver.ResolverType.Method), i);
+        XposedHelpers.callMethod(nativeByteBuffer, Obfuscate.getMethodName("NativeByteBuffer","writeInt32"), i);
     }
 
 

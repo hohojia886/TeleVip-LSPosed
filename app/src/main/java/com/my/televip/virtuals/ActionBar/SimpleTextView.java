@@ -3,7 +3,8 @@ package com.my.televip.virtuals.ActionBar;
 import android.text.Layout;
 import android.view.View;
 
-import com.my.televip.obfuscate.AutomationResolver;
+import com.my.televip.obfuscate.ArgsResolver;
+import com.my.televip.obfuscate.Obfuscate;
 
 import de.robv.android.xposed.XposedHelpers;
 
@@ -16,23 +17,23 @@ public class SimpleTextView {
     }
 
     public CharSequence getText(){
-        return (CharSequence) XposedHelpers.callMethod(simpleTextView, AutomationResolver.resolve("SimpleTextView", "getText", AutomationResolver.ResolverType.Method));
+        return (CharSequence) XposedHelpers.callMethod(simpleTextView, Obfuscate.getMethodName("SimpleTextView", "getText"));
     }
 
     public void setText(CharSequence text){
-        XposedHelpers.callMethod(simpleTextView, AutomationResolver.resolve("SimpleTextView", "setText", AutomationResolver.ResolverType.Method), text);
+        XposedHelpers.callMethod(simpleTextView, Obfuscate.getMethodName("SimpleTextView", "setText"), text);
     }
 
     public void setText(CharSequence text, boolean force){
-        XposedHelpers.callMethod(simpleTextView, AutomationResolver.resolve("SimpleTextView", "setText", AutomationResolver.ResolverType.Method), text, force);
+        XposedHelpers.callMethod(simpleTextView, Obfuscate.getMethodName("SimpleTextView", "setText"), text, force);
     }
 
     public void setAlignment(Layout.Alignment alignment){
-        XposedHelpers.callMethod(simpleTextView, AutomationResolver.resolve("SimpleTextView", "setAlignment", AutomationResolver.ResolverType.Method), alignment);
+        XposedHelpers.callMethod(simpleTextView, Obfuscate.getMethodName("SimpleTextView", "setAlignment"), alignment);
     }
 
     public void setMaxLines(int value){
-        XposedHelpers.callMethod(simpleTextView, AutomationResolver.resolve("SimpleTextView", "setMaxLines", AutomationResolver.ResolverType.Method), value);
+        XposedHelpers.callMethod(simpleTextView, Obfuscate.getMethodName("SimpleTextView", "setMaxLines"), value);
     }
 
     public View getSimpleTextView(){

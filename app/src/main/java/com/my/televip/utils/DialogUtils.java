@@ -10,9 +10,9 @@ import android.widget.LinearLayout;
 
 import com.my.televip.language.Keys;
 import com.my.televip.language.Translator;
+import com.my.televip.ui.ThemeColors;
 import com.my.televip.virtuals.ActionBar.AlertDialog;
-import com.my.televip.virtuals.Theme;
-import com.my.televip.virtuals.ui.Cells.RadioColorCell;
+import com.my.televip.ui.Cells.RadioColorCell;
 
 public class DialogUtils {
 
@@ -24,7 +24,7 @@ public class DialogUtils {
             RadioColorCell cell = new RadioColorCell(parentActivity);
             cell.setPadding(dp(4), 0, dp(4), 0);
             cell.setTag(a);
-            cell.setCheckColor(Theme.getTextColor(), Theme.getTextBlueColor());
+            cell.setCheckColor(ThemeColors.getTextColor(), ThemeColors.getTextBlueColor());
             cell.setTextAndValue(options[a], selected == a);
             linearLayout.addView(cell);
             cell.setOnClickListener(v -> {

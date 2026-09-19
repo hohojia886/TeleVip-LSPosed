@@ -6,14 +6,15 @@ import android.widget.ImageView;
 
 import com.my.televip.Class.ClassLoad;
 import com.my.televip.Class.ClassNames;
-import com.my.televip.ClientChecker;
+import com.my.televip.Clients.ClientManager;
 import com.my.televip.Drawable.GhostDrawable;
-import com.my.televip.base.AbstractMethodHook;
+import com.my.televip.base.BaseMethodHook;
 import com.my.televip.hooks.HMethod;
 import com.my.televip.language.Keys;
 import com.my.televip.language.Translator;
 import com.my.televip.logging.Logger;
-import com.my.televip.obfuscate.AutomationResolver;
+import com.my.televip.obfuscate.ArgsResolver;
+import com.my.televip.obfuscate.Obfuscate;
 import com.my.televip.settings.controller.SettingsController;
 import com.my.televip.utils.Utils;
 import com.my.televip.virtuals.Adapters.DrawerLayoutAdapter;
@@ -37,19 +38,19 @@ public class SettingsHook {
 
             GhostDrawable ghostDrawable = new GhostDrawable();
 
-            HMethod.hookMethod(ClassLoad.getClass(ClassNames.SETTINGS_ACTIVITY_SETTING_CELL), AutomationResolver.resolve("SettingsActivity$SettingCell", "set", AutomationResolver.ResolverType.Method), AutomationResolver.merge(AutomationResolver.resolveObject("set", new Class[]{int.class, int.class, int.class, CharSequence.class, CharSequence.class, CharSequence.class}), new AbstractMethodHook() {
+            HMethod.hookMethod(ClassLoad.getClass(ClassNames.SETTINGS_ACTIVITY_SETTING_CELL), Obfuscate.getMethodName("SettingsActivity$SettingCell", "set"), ArgsResolver.merge("set", new Class[]{int.class, int.class, int.class, CharSequence.class, CharSequence.class, CharSequence.class}, new BaseMethodHook() {
                 @Override
                 protected void afterMethod(MethodHookParam param) {
                     int id = (int) param.args[2];
                     if (id == 8353847) {
-                        ImageView iconView = (ImageView) XposedHelpers.getObjectField(param.thisObject, AutomationResolver.resolve("SettingsActivity$SettingCell", "iconView", AutomationResolver.ResolverType.Field));
+                        ImageView iconView = (ImageView) XposedHelpers.getObjectField(param.thisObject, Obfuscate.getFieldName("SettingsActivity$SettingCell", "iconView"));
                         iconView.setImageDrawable(ghostDrawable);
                     }
                 }
             }));
 
-            HMethod.hookMethod(SettingsActivityClass, AutomationResolver.resolve("SettingsActivity", "fillItems", AutomationResolver.ResolverType.Method),
-                    AutomationResolver.merge(AutomationResolver.resolveObject("fillItems", new Class[]{java.util.ArrayList.class, ClassLoad.getClass(ClassNames.UNIVERSAL_ADAPTER)}), new AbstractMethodHook() {
+            HMethod.hookMethod(SettingsActivityClass, Obfuscate.getMethodName("SettingsActivity", "fillItems"),
+                    ArgsResolver.merge("fillItems", new Class[]{java.util.ArrayList.class, ClassLoad.getClass(ClassNames.UNIVERSAL_ADAPTER)}, new BaseMethodHook() {
                         @Override
                         protected void afterMethod(final MethodHookParam param) {
                             ArrayList<Object> arrayList = (ArrayList<Object>) param.args[0];
@@ -58,7 +59,7 @@ public class SettingsHook {
                                 int color1 = 0xFFF46F6F;
                                 int color2 = 0xFFDF5555;
 
-                                Object uItem = XposedHelpers.callStaticMethod(SettingsActivity$SettingCell$FactoryClass, AutomationResolver.resolve("SettingsActivity$SettingCell$Factory", "of", AutomationResolver.ResolverType.Method), 8353847,
+                                Object uItem = XposedHelpers.callStaticMethod(SettingsActivity$SettingCell$FactoryClass, Obfuscate.getMethodName("SettingsActivity$SettingCell$Factory", "of"), 8353847,
                                         color1,
                                         color2,
                                         8353847,
@@ -82,7 +83,7 @@ public class SettingsHook {
 
             HMethod.hookMethod(
                     SettingsActivityClass,
-                    AutomationResolver.resolve("SettingsActivity", "onClick", AutomationResolver.ResolverType.Method), AutomationResolver.merge(AutomationResolver.resolveObject("onClick", new Class[]{UItemClass, View.class, int.class, float.class, float.class}), new AbstractMethodHook() {
+                    Obfuscate.getMethodName("SettingsActivity", "onClick"), ArgsResolver.merge("onClick", new Class[]{UItemClass, View.class, int.class, float.class, float.class}, new BaseMethodHook() {
                         @Override
                         protected void afterMethod(final MethodHookParam param) {
                             UItem uItem = new UItem(param.args[0]);
@@ -99,13 +100,13 @@ public class SettingsHook {
     }
 
     public void oldSettings(SettingsController settingsController){
-        final Class<?> itemClass = XposedHelpers.findClassIfExists(AutomationResolver.resolve("org.telegram.ui.Adapters.DrawerLayoutAdapter$Item"), Utils.classLoader);
+        final Class<?> itemClass = XposedHelpers.findClassIfExists(Obfuscate.getClassName("org.telegram.ui.Adapters.DrawerLayoutAdapter$Item"), Utils.classLoader);
 
         if (itemClass != null) {
             HMethod.hookMethod(
                     ClassLoad.getClass(ClassNames.DRAWER_LAYOUT_ADAPTER),
-                    AutomationResolver.resolve("DrawerLayoutAdapter", "resetItems", AutomationResolver.ResolverType.Method),
-                    new AbstractMethodHook() {
+                    Obfuscate.getMethodName("DrawerLayoutAdapter", "resetItems"),
+                    new BaseMethodHook() {
                         @Override
                         protected void afterMethod(MethodHookParam param) throws Throwable {
 
@@ -114,7 +115,7 @@ public class SettingsHook {
                             ArrayList<?> items = drawerLayoutAdapter.getItems();
 
                             if (itemConstructor == null) {
-                                itemConstructor = itemClass.getDeclaredConstructor(AutomationResolver.resolveObject("item", new Class[]{int.class, CharSequence.class, int.class}));
+                                itemConstructor = itemClass.getDeclaredConstructor(ArgsResolver.resolveObject("item", new Class[]{int.class, CharSequence.class, int.class}));
                                 itemConstructor.setAccessible(true);
                             }
 
@@ -128,25 +129,25 @@ public class SettingsHook {
                     }
             );
 
-            AbstractMethodHook onCreateHook = new AbstractMethodHook() {
+            BaseMethodHook onCreateHook = new BaseMethodHook() {
                 @Override
                 protected void afterMethod(final MethodHookParam param) {
 
                     Object Launch = param.thisObject;
 
-                    Object drawerLayoutAdapter = XposedHelpers.getObjectField(Launch, AutomationResolver.resolve("LaunchActivity", "drawerLayoutAdapter", AutomationResolver.ResolverType.Field));
+                    Object drawerLayoutAdapter = XposedHelpers.getObjectField(Launch, Obfuscate.getFieldName("LaunchActivity", "drawerLayoutAdapter"));
                     if (drawerLayoutAdapter != null) {
                         Object args = param.args[1];
 
-                        int id = (int) XposedHelpers.callMethod(drawerLayoutAdapter, AutomationResolver.resolve("DrawerLayoutAdapter", "getId", AutomationResolver.ResolverType.Method), args);
+                        int id = (int) XposedHelpers.callMethod(drawerLayoutAdapter, Obfuscate.getMethodName("DrawerLayoutAdapter", "getId"), args);
                         if (id == 8353847) {
 
-                            Object drawerLayoutContainer = XposedHelpers.getObjectField(Launch, AutomationResolver.resolve("LaunchActivity", "drawerLayoutContainer", AutomationResolver.ResolverType.Field));
+                            Object drawerLayoutContainer = XposedHelpers.getObjectField(Launch, Obfuscate.getFieldName("LaunchActivity", "drawerLayoutContainer"));
                             if (drawerLayoutContainer != null) {
-                                if (!ClientChecker.check(ClientChecker.ClientType.ForkgramClassic)) {
-                                    XposedHelpers.callMethod(drawerLayoutContainer, AutomationResolver.resolve("DrawerLayoutContainer", "closeDrawer", AutomationResolver.ResolverType.Method));
+                                if (!ClientManager.is(ClientManager.Client.ForkgramClassic)) {
+                                    XposedHelpers.callMethod(drawerLayoutContainer, Obfuscate.getMethodName("DrawerLayoutContainer", "closeDrawer"));
                                 } else {
-                                    XposedHelpers.callMethod(drawerLayoutContainer, AutomationResolver.resolve("DrawerLayoutContainer", "closeDrawer", AutomationResolver.ResolverType.Method), true);
+                                    XposedHelpers.callMethod(drawerLayoutContainer, Obfuscate.getMethodName("DrawerLayoutContainer", "closeDrawer"), true);
                                 }
                             }
 
@@ -161,7 +162,7 @@ public class SettingsHook {
 
                 Method onCreateMethod = null;
                 for (Method method : ClassLoad.getClass(ClassNames.LAUNCH_ACTIVITY).getDeclaredMethods()) {
-                    if (Arrays.equals(method.getParameterTypes(), AutomationResolver.resolveObject("onCreateMethod", new Class[]{android.view.View.class, int.class, float.class, float.class}))) {
+                    if (Arrays.equals(method.getParameterTypes(), ArgsResolver.resolveObject("onCreateMethod", new Class[]{android.view.View.class, int.class, float.class, float.class}))) {
                         onCreateMethod = method;
                         break;
                     }

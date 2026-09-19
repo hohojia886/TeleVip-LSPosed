@@ -3,7 +3,8 @@ package com.my.televip.virtuals.tgnet;
 import com.my.televip.Class.ClassNames;
 import com.my.televip.utils.Utils;
 import com.my.televip.Class.ClassLoad;
-import com.my.televip.obfuscate.AutomationResolver;
+import com.my.televip.obfuscate.ArgsResolver;
+import com.my.televip.obfuscate.Obfuscate;
 
 import java.lang.reflect.Proxy;
 
@@ -18,7 +19,7 @@ public class RequestDelegate {
     }
 
     public void run(Object response, Object error){
-        XposedHelpers.callMethod(requestDelegate, AutomationResolver.resolve("RequestDelegate", "run", AutomationResolver.ResolverType.Method), response, error);
+        XposedHelpers.callMethod(requestDelegate, Obfuscate.getMethodName("RequestDelegate", "run"), response, error);
     }
 
 

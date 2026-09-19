@@ -2,7 +2,8 @@ package com.my.televip.virtuals.ui;
 
 import android.widget.FrameLayout;
 
-import com.my.televip.obfuscate.AutomationResolver;
+import com.my.televip.obfuscate.ArgsResolver;
+import com.my.televip.obfuscate.Obfuscate;
 
 import de.robv.android.xposed.XposedHelpers;
 
@@ -13,7 +14,7 @@ public class LaunchActivity {
 
     public LaunchActivity(Object obj){
        launchActivity = obj;
-       frameLayout = (FrameLayout) XposedHelpers.getObjectField(obj, AutomationResolver.resolve("LaunchActivity","frameLayout", AutomationResolver.ResolverType.Field));
+       frameLayout = (FrameLayout) XposedHelpers.getObjectField(obj, Obfuscate.getFieldName("LaunchActivity","frameLayout"));
     }
 
 }

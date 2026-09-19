@@ -23,6 +23,11 @@ public class Logger {
         XposedBridge.log("[TeleVip] pkgName: "+ pkgName +" " + text);
     }
 
+    public static void e(String text)
+    {
+        XposedBridge.log("[TeleVip] [Error] Ai: " + text);
+    }
+
     public static void e(Throwable throwable) {
         try {
             StringBuilder log = new StringBuilder();

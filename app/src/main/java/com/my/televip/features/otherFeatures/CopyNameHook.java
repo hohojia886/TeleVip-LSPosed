@@ -7,22 +7,24 @@ import android.widget.Toast;
 
 import com.my.televip.Class.ClassNames;
 import com.my.televip.Class.ClassLoad;
-import com.my.televip.base.AbstractMethodHook;
+import com.my.televip.base.BaseMethodHook;
 import com.my.televip.hooks.HMethod;
 import com.my.televip.language.Keys;
 import com.my.televip.language.Translator;
 import com.my.televip.logging.Logger;
-import com.my.televip.obfuscate.AutomationResolver;
+import com.my.televip.obfuscate.ArgsResolver;
+import com.my.televip.obfuscate.Obfuscate;
+import com.my.televip.utils.Utils;
 import com.my.televip.virtuals.ActionBar.SimpleTextView;
 import com.my.televip.virtuals.ui.ProfileActivity;
 
 public class CopyNameHook {
 
-    public static void init(Context context) {
+    public static void init() {
         try {
             if (ClassLoad.getClass(ClassNames.PROFILE_ACTIVITY) != null) {
 
-                HMethod.hookMethod(ClassLoad.getClass(ClassNames.PROFILE_ACTIVITY), AutomationResolver.resolve("ProfileActivity", "createView", AutomationResolver.ResolverType.Method), AutomationResolver.merge(AutomationResolver.resolveObject("createView", new Class[]{Context.class}), new AbstractMethodHook() {
+                HMethod.hookMethod(ClassLoad.getClass(ClassNames.PROFILE_ACTIVITY), Obfuscate.getMethodName("ProfileActivity", "createView"), ArgsResolver.merge("createView", new Class[]{Context.class}, new BaseMethodHook() {
                     @Override
                     protected void afterMethod(MethodHookParam param) {
                         final ProfileActivity profileActivity = new ProfileActivity(param.thisObject);
@@ -37,8 +39,8 @@ public class CopyNameHook {
                                 simpleTextView.getSimpleTextView().setOnClickListener(v -> {
                                     if (simpleTextView.getText() != null) {
                                         String name = Translator.get(Keys.Copied, simpleTextView.getText());
-                                        ((ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText("clipboard", simpleTextView.getText()));
-                                        Toast.makeText(context, name, Toast.LENGTH_LONG).show();
+                                        ((ClipboardManager) Utils.getCurrentActivity().getSystemService(Context.CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText("clipboard", simpleTextView.getText()));
+                                        Toast.makeText(Utils.getCurrentActivity(), name, Toast.LENGTH_LONG).show();
                                     }
                                 });
                             }

@@ -1,12 +1,12 @@
 package com.my.televip.settings;
 
-import com.my.televip.ClientChecker;
+import com.my.televip.Clients.ClientManager;
 import com.my.televip.Clients.Turrit;
-import com.my.televip.utils.Utils;
-import com.my.televip.obfuscate.AutomationResolver;
+import com.my.televip.obfuscate.Obfuscate;
 import com.my.televip.settings.controller.SettingsController;
 import com.my.televip.settings.hook.SettingsHook;
 import com.my.televip.settings.ui.SettingsActivity;
+import com.my.televip.utils.Utils;
 
 import de.robv.android.xposed.XposedHelpers;
 
@@ -17,12 +17,12 @@ public class SettingsManager {
         SettingsActivity.init(settingsController);
 
         Class<?> SettingsActivityClass = XposedHelpers.findClassIfExists(
-                AutomationResolver.resolve("org.telegram.ui.SettingsActivity"),
+                Obfuscate.getClassName("org.telegram.ui.SettingsActivity"),
                 Utils.classLoader
         );
 
         Class<?> SettingsActivity$SettingCell$FactoryClass = XposedHelpers.findClassIfExists(
-                AutomationResolver.resolve("org.telegram.ui.SettingsActivity$SettingCell$Factory"),
+                Obfuscate.getClassName("org.telegram.ui.SettingsActivity$SettingCell$Factory"),
                 Utils.classLoader
         );
 
@@ -32,8 +32,8 @@ public class SettingsManager {
         } else {
             settings.oldSettings(settingsController);
         }
-        if (ClientChecker.check(ClientChecker.ClientType.ForkgramClassic)) settings.oldSettings(settingsController);
-        if (ClientChecker.check(ClientChecker.ClientType.Turrit)) Turrit.showGhostModeDialog(settingsController);
+        if (ClientManager.is(ClientManager.Client.ForkgramClassic)) settings.oldSettings(settingsController);
+        if (ClientManager.is(ClientManager.Client.Turrit)) Turrit.showGhostModeDialog(settingsController);
     }
 
 }

@@ -1,16 +1,16 @@
 package com.my.televip.features.otherFeatures;
 
-import android.content.Context;
-
 import com.my.televip.Class.ClassLoad;
 import com.my.televip.Class.ClassNames;
-import com.my.televip.ClientChecker;
-import com.my.televip.base.AbstractMethodHook;
+import com.my.televip.Clients.ClientManager;
+import com.my.televip.base.BaseMethodHook;
 import com.my.televip.hooks.HMethod;
 import com.my.televip.language.Keys;
 import com.my.televip.language.Translator;
-import com.my.televip.obfuscate.AutomationResolver;
+import com.my.televip.obfuscate.ArgsResolver;
+import com.my.televip.obfuscate.Obfuscate;
 import com.my.televip.utils.IdDateEstimator;
+import com.my.televip.utils.Utils;
 import com.my.televip.virtuals.ActionBar.ActionBarMenuItem;
 import com.my.televip.virtuals.ActionBar.AlertDialog;
 import com.my.televip.virtuals.ui.ProfileActivity;
@@ -21,15 +21,15 @@ public class ProfileHook {
 
     private static boolean initialized = false;
 
-    public static void init(Context context, String className) {
+    public static void init(String className) {
         if (initialized || className == null) return;
 
         Class<?> clazz = ClassLoad.getClass(className);
-        if (clazz == null) FeatureStateManager.reset(context);
+        if (clazz == null) FeatureStateManager.reset();
 
         initialized = true;
 
-        HMethod.hookMethod(ClassLoad.getClass(ClassNames.PROFILE_ACTIVITY), AutomationResolver.resolve("ProfileActivity", "createActionBarMenu", AutomationResolver.ResolverType.Method), AutomationResolver.merge(AutomationResolver.resolveObject("createActionBarMenu", new Class[]{boolean.class}), new AbstractMethodHook() {
+        HMethod.hookMethod(ClassLoad.getClass(ClassNames.PROFILE_ACTIVITY), Obfuscate.getMethodName("ProfileActivity", "createActionBarMenu"), ArgsResolver.merge("createActionBarMenu", new Class[]{boolean.class}, new BaseMethodHook() {
             @Override
             protected void afterMethod(MethodHookParam param) {
                 ProfileActivity profileActivity = new ProfileActivity(param.thisObject);
@@ -41,7 +41,7 @@ public class ProfileHook {
 
                         int drawableResource = 0x7f0806d3;
 
-                        if (!ClientChecker.check(ClientChecker.ClientType.Nagram) && !ClientChecker.check(ClientChecker.ClientType.Momogram)) {
+                        if (!ClientManager.is(ClientManager.Client.Nagram) && !ClientManager.is(ClientManager.Client.Momogram)) {
                             drawableResource = XposedHelpers.getStaticIntField(ClassLoad.getClass(ClassNames.DRAWABLE), "msg_filled_menu_users");
                         }
 
@@ -51,17 +51,17 @@ public class ProfileHook {
             }
         }));
 
-        HMethod.hookMethod(clazz, "onItemClick", int.class, new AbstractMethodHook() {
+        HMethod.hookMethod(clazz, "onItemClick", int.class, new BaseMethodHook() {
             @Override
             protected void afterMethod(MethodHookParam param) {
 
                 int id = (int) param.args[0];
 
                 if (id == 8353847) {
-                    final Object thisClass = XposedHelpers.getObjectField(param.thisObject, AutomationResolver.resolve("ProfileActivity", "this$0", AutomationResolver.ResolverType.Field));
+                    final Object thisClass = XposedHelpers.getObjectField(param.thisObject, Obfuscate.getFieldName("ProfileActivity", "this$0"));
                     ProfileActivity profile = new ProfileActivity(thisClass);
 
-                    AlertDialog alertDialog = new AlertDialog(context);
+                    AlertDialog alertDialog = new AlertDialog(Utils.getCurrentActivity());
                     alertDialog.setTitle(Translator.get(Keys.TeleVip));
                     alertDialog.setMessage("\n" +
                             Translator.get(Keys.ApproximateCreationDate) + " : " +

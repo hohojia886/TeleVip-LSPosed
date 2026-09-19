@@ -1,36 +1,34 @@
 package com.my.televip.Configs;
 
-import android.content.Context;
-
-import com.my.televip.ClientChecker;
+import com.my.televip.Clients.ClientManager;
 import com.my.televip.Clients.Telegraph;
-import com.my.televip.features.DisableChannelSwipeBack;
-import com.my.televip.features.DisableNumberRounding;
-import com.my.televip.features.DisableProfileSwipeBack;
-import com.my.televip.features.DisableStories;
-import com.my.televip.features.DownloadSpeed;
-import com.my.televip.features.EnableSavingStories;
-import com.my.televip.features.FixTLError;
-import com.my.televip.features.GhostMode;
-import com.my.televip.features.HidePhone;
-import com.my.televip.features.HidePinnedMessages;
-import com.my.televip.features.HideProxySponsor;
-import com.my.televip.features.HideUpdateApp;
-import com.my.televip.features.HijriDate;
-import com.my.televip.features.PreventMedia;
-import com.my.televip.features.RemovesContentSaving;
-import com.my.televip.features.SaveEditsHistory;
-import com.my.televip.features.SecretMediaSave;
-import com.my.televip.features.ShowDeletedMessages;
-import com.my.televip.features.TelePremium;
-import com.my.televip.features.VoiceToMusicHook;
+import com.my.televip.features.ui.DisableChannelSwipeBack;
+import com.my.televip.features.ui.DisableNumberRounding;
+import com.my.televip.features.ui.DisableProfileSwipeBack;
+import com.my.televip.features.stories.DisableStories;
+import com.my.televip.features.connections.DownloadSpeed;
+import com.my.televip.features.media.EnableSavingStories;
+import com.my.televip.features.other.FixTLError;
+import com.my.televip.features.ghostMode.GhostMode;
+import com.my.televip.features.ghostMode.HidePhone;
+import com.my.televip.features.ui.HidePinnedMessages;
+import com.my.televip.features.ui.HideProxySponsor;
+import com.my.televip.features.other.HideUpdateApp;
+import com.my.televip.features.ui.HijriDate;
+import com.my.televip.features.media.PreventMedia;
+import com.my.televip.features.other.RemovesContentSaving;
+import com.my.televip.features.messages.SaveEditsHistory;
+import com.my.televip.features.media.SecretMediaSave;
+import com.my.televip.features.other.TelePremium;
+import com.my.televip.features.media.VoiceToMusicHook;
+import com.my.televip.features.messages.MessageTimeModifier;
+import com.my.televip.features.messages.ShowDeletedMessages;
 import com.my.televip.features.otherFeatures.AlwaysSaveMedia;
 import com.my.televip.features.otherFeatures.CopyNameHook;
 import com.my.televip.features.otherFeatures.EditOnlineTextView;
 import com.my.televip.features.otherFeatures.FeatureInitializer;
 import com.my.televip.language.Keys;
 import com.my.televip.logging.Logger;
-import com.my.televip.virtuals.ui.Cells.ChatMessageCell;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,13 +96,12 @@ public class ConfigManager {
     public static ConfigItem btnChannel;
     public static ConfigItem btnRestartApp;
 
-    public static void loadAndRead(Context context){
+    public static void loadAndRead(){
         ConfigPreferences.init();
-        load(context);
-        readFeature(context);
+        load();
     }
 
-    public static void load(Context context) {
+    public static void load() {
         items.clear();
 
         // GhostMode
@@ -156,15 +153,15 @@ public class ConfigManager {
         messages = new ConfigItem(ConfigItem.HEADER, Keys.MessagesSettings);
         items.add(messages);
 
-        showDeletedMessages = new ConfigItem(ConfigItem.SWITCH, Keys.ShowDeletedMessages, ConfigPreferences.getBoolean(Keys.ShowDeletedMessages), ShowDeletedMessages::initProcessing);
+        showDeletedMessages = new ConfigItem(ConfigItem.SWITCH, Keys.ShowDeletedMessages, ConfigPreferences.getBoolean(Keys.ShowDeletedMessages), ShowDeletedMessages::init);
         items.add(showDeletedMessages);
 
-        if (!ClientChecker.check(ClientChecker.ClientType.NagramX)) {
-            showMessageId = new ConfigItem(ConfigItem.SWITCH, Keys.ShowMessageID, ConfigPreferences.getBoolean(Keys.ShowMessageID), ChatMessageCell::init);
+        if (!ClientManager.is(ClientManager.Client.NagramX)) {
+            showMessageId = new ConfigItem(ConfigItem.SWITCH, Keys.ShowMessageID, ConfigPreferences.getBoolean(Keys.ShowMessageID), MessageTimeModifier::init);
             items.add(showMessageId);
         }
 
-        saveEditsHistory = new ConfigItem(ConfigItem.SWITCH, Keys.SaveEditsHistory, ConfigPreferences.getBoolean(Keys.SaveEditsHistory), () -> SaveEditsHistory.init(context));
+        saveEditsHistory = new ConfigItem(ConfigItem.SWITCH, Keys.SaveEditsHistory, ConfigPreferences.getBoolean(Keys.SaveEditsHistory), SaveEditsHistory::init);
         items.add(saveEditsHistory);
 
         items.add(shadows);
@@ -182,7 +179,7 @@ public class ConfigManager {
         media = new ConfigItem(ConfigItem.HEADER, Keys.MediaSettings);
         items.add(media);
 
-        if (!ClientChecker.check(ClientChecker.ClientType.Nekogram) && !ClientChecker.check(ClientChecker.ClientType.Cherrygram)) {
+        if (!ClientManager.is(ClientManager.Client.Nekogram) && !ClientManager.is(ClientManager.Client.Cherrygram)) {
             secretMediaSave = new ConfigItem(ConfigItem.SWITCH, Keys.SecretMediaSave, ConfigPreferences.getBoolean(Keys.SecretMediaSave), SecretMediaSave::init);
             items.add(secretMediaSave);
         }
@@ -214,8 +211,8 @@ public class ConfigManager {
         hideProxySponsor = new ConfigItem(ConfigItem.SWITCH, Keys.HideProxySponsor, true, ConfigPreferences.getBoolean(Keys.HideProxySponsor), HideProxySponsor::init);
         items.add(hideProxySponsor);
 
-        if (!ClientChecker.check(ClientChecker.ClientType.Telegraph) && !ClientChecker.check(ClientChecker.ClientType.Nekogram) && !ClientChecker.check(ClientChecker.ClientType.Cherrygram)) {
-            showUserID = new ConfigItem(ConfigItem.SWITCH, Keys.ShowUserID, ConfigPreferences.getBoolean(Keys.ShowUserID), () -> EditOnlineTextView.init(context));
+        if (!ClientManager.is(ClientManager.Client.Telegraph) && !ClientManager.is(ClientManager.Client.Nekogram) && !ClientManager.is(ClientManager.Client.Cherrygram)) {
+            showUserID = new ConfigItem(ConfigItem.SWITCH, Keys.ShowUserID, ConfigPreferences.getBoolean(Keys.ShowUserID), EditOnlineTextView::init);
             items.add(showUserID);
             customCalendar = new ConfigItem(ConfigItem.TEXT, Keys.Calendar, true, HijriDate::init);
             items.add(customCalendar);
@@ -233,7 +230,7 @@ public class ConfigManager {
         telegramPremium = new ConfigItem(ConfigItem.SWITCH, Keys.TelegramPremium, ConfigPreferences.getBoolean(Keys.TelegramPremium), TelePremium::init);
         items.add(telegramPremium);
 
-        if (!ClientChecker.check(ClientChecker.ClientType.Telegraph)) {
+        if (!ClientManager.is(ClientManager.Client.Telegraph)) {
             disableNumberRounding = new ConfigItem(ConfigItem.SWITCH, Keys.DisableNumberRounding, "5.3K -> 5300", ConfigPreferences.getBoolean(Keys.DisableNumberRounding), DisableNumberRounding::init);
             hideUpdateApp = new ConfigItem(ConfigItem.SWITCH, Keys.HideUpdateApp, true, ConfigPreferences.getBoolean(Keys.HideUpdateApp), HideUpdateApp::init);
             fixTLError = new ConfigItem(ConfigItem.SWITCH, Keys.FixTLError, ConfigPreferences.getBoolean(Keys.FixTLError), FixTLError::init);
@@ -254,13 +251,15 @@ public class ConfigManager {
 
         items.add(shadows);
 
+        readFeature();
+
     }
 
     public static List<ConfigItem> getItems() {
         return items;
     }
 
-    public static void readFeature(Context context) {
+    public static void readFeature() {
         try {
             for (ConfigItem item : items) {
                 if (item == null) continue;
@@ -268,14 +267,14 @@ public class ConfigManager {
                 if (item.isEnable()) item.run();
             }
 
-            if (!ClientChecker.check(ClientChecker.ClientType.Telegraph) && !ClientChecker.check(ClientChecker.ClientType.Nekogram) && !ClientChecker.check(ClientChecker.ClientType.Cherrygram)) {
-                FeatureInitializer.init(context);
-                CopyNameHook.init(context);
-                EditOnlineTextView.init(context);
+            if (!ClientManager.is(ClientManager.Client.Telegraph) && !ClientManager.is(ClientManager.Client.Nekogram) && !ClientManager.is(ClientManager.Client.Cherrygram)) {
+                FeatureInitializer.init();
+                CopyNameHook.init();
+                EditOnlineTextView.init();
             }
             AlwaysSaveMedia.init();
 
-            if (ClientChecker.check(ClientChecker.ClientType.Telegraph)) Telegraph.removeAd();
+            if (ClientManager.is(ClientManager.Client.Telegraph)) Telegraph.removeAd();
 
         } catch (Throwable e) {
             Logger.e(e);
@@ -288,7 +287,6 @@ public class ConfigManager {
                 hideTyping.isEnable() ||
                 hideOnline.isEnable() ||
                 markReadAfterSend.isEnable();
-
     }
 
 }

@@ -1,6 +1,7 @@
 package com.my.televip.virtuals.androidx;
 
-import com.my.televip.obfuscate.AutomationResolver;
+import com.my.televip.obfuscate.ArgsResolver;
+import com.my.televip.obfuscate.Obfuscate;
 
 import de.robv.android.xposed.XposedHelpers;
 
@@ -13,7 +14,7 @@ public class Adapter {
     }
 
     public void notifyItemChanged(int position) {
-        XposedHelpers.callMethod(adapter, AutomationResolver.resolve("RecyclerListView", "notifyItemChanged", AutomationResolver.ResolverType.Method), position);
+        XposedHelpers.callMethod(adapter, Obfuscate.getMethodName("RecyclerListView", "notifyItemChanged"), position);
     }
 
 }

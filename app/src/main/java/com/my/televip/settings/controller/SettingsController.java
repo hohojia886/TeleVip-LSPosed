@@ -9,6 +9,7 @@ import com.my.televip.language.Keys;
 import com.my.televip.language.Translator;
 import com.my.televip.settings.ui.SettingsActivity;
 import com.my.televip.logging.Logger;
+import com.my.televip.utils.Utils;
 import com.my.televip.virtuals.ActionBar.AlertDialog;
 import com.my.televip.virtuals.messenger.browser.Browser;
 import com.my.televip.virtuals.ui.LaunchActivity;
@@ -16,22 +17,19 @@ import com.my.televip.virtuals.ui.LaunchActivity;
 public class SettingsController {
 
     public FrameLayout settingsView;
-    private final Context context;
 
     public SettingsActivity settingsActivity;
 
-    public SettingsController(Context context) {
-        this.context = context;
-    }
+    public SettingsController() {}
 
     public void openView(){
         try {
             if (settingsView == null) {
-                settingsView = new FrameLayout(context);
+                settingsView = new FrameLayout(getContext());
             }
 
             settingsView.removeAllViews();
-            settingsActivity = new SettingsActivity(context);
+            settingsActivity = new SettingsActivity(getContext());
             showJoinTeleVip();
 
             settingsView.addView(settingsActivity.createView(this));
@@ -45,13 +43,13 @@ public class SettingsController {
     private void showJoinTeleVip() {
         try {
             if (!ConfigPreferences.getBoolean("JTV")) {
-                AlertDialog alertDialog = new AlertDialog(context);
+                AlertDialog alertDialog = new AlertDialog(getContext());
 
                 alertDialog.setTitle(Translator.get(Keys.GhostMode));
                 alertDialog.setMessage(Translator.get(Keys.JoinTeleVip));
 
                 alertDialog.setPositiveButton(Translator.get(Keys.Join), AlertDialog.click(() -> {
-                    Browser.openUrl(context, "https://t.me/t_l0_e");
+                    Browser.openUrl(getContext(), "https://t.me/t_l0_e");
                     hide();
                 }));
 
@@ -65,7 +63,7 @@ public class SettingsController {
     }
 
     public void show(View target) {
-        LaunchActivity launchActivity = new LaunchActivity(context);
+        LaunchActivity launchActivity = new LaunchActivity(Utils.getCurrentActivity());
         if (target.getParent() == null) {
             launchActivity.frameLayout.addView(target);
         }
@@ -92,7 +90,7 @@ public class SettingsController {
     }
 
     public Context getContext() {
-        return context;
+        return Utils.getCurrentActivity();
     }
 
 }

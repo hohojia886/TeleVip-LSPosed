@@ -1,6 +1,7 @@
 package com.my.televip.virtuals.messenger;
 
-import com.my.televip.obfuscate.AutomationResolver;
+import com.my.televip.obfuscate.ArgsResolver;
+import com.my.televip.obfuscate.Obfuscate;
 
 import de.robv.android.xposed.XposedHelpers;
 
@@ -13,7 +14,7 @@ public class ImageReceiver {
     }
 
     public ImageLocation getImageLocation() {
-        return new ImageLocation(XposedHelpers.callMethod(imageReceiver, AutomationResolver.resolve("ImageReceiver", "getImageLocation", AutomationResolver.ResolverType.Method)));
+        return new ImageLocation(XposedHelpers.callMethod(imageReceiver, Obfuscate.getMethodName("ImageReceiver", "getImageLocation")));
     }
 
 }

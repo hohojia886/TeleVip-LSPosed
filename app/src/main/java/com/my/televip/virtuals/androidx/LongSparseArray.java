@@ -1,6 +1,7 @@
 package com.my.televip.virtuals.androidx;
 
-import com.my.televip.obfuscate.AutomationResolver;
+import com.my.televip.obfuscate.ArgsResolver;
+import com.my.televip.obfuscate.Obfuscate;
 
 import java.util.ArrayList;
 
@@ -15,6 +16,6 @@ public class LongSparseArray {
     }
 
     public ArrayList<Object> get(long id){
-        return (ArrayList<Object>) XposedHelpers.callMethod(longSparseArray, AutomationResolver.resolve("LongSparseArray", "get", AutomationResolver.ResolverType.Method), id);
+        return (ArrayList<Object>) XposedHelpers.callMethod(longSparseArray, Obfuscate.getMethodName("LongSparseArray", "get"), id);
     }
 }

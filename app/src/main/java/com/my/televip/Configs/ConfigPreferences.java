@@ -68,6 +68,7 @@ public class ConfigPreferences {
 
     public static void remove(String key){
         try {
+            if (key == null) return;
             sharedPreferences.edit().remove(key).apply();
         } catch (Throwable t){
             Logger.e(t);

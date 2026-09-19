@@ -7,16 +7,18 @@ import android.widget.LinearLayout;
 
 import com.my.televip.Class.ClassLoad;
 import com.my.televip.Class.ClassNames;
-import com.my.televip.ClientChecker;
-import com.my.televip.base.AbstractMethodHook;
+import com.my.televip.Clients.ClientManager;
+import com.my.televip.base.BaseMethodHook;
 import com.my.televip.hooks.HMethod;
 import com.my.televip.language.Keys;
 import com.my.televip.language.Translator;
 import com.my.televip.logging.Logger;
-import com.my.televip.obfuscate.AutomationResolver;
+import com.my.televip.obfuscate.ArgsResolver;
+import com.my.televip.obfuscate.Obfuscate;
+import com.my.televip.utils.Utils;
 import com.my.televip.virtuals.ActionBar.ActionBarMenuItem;
 import com.my.televip.virtuals.ActionBar.AlertDialog;
-import com.my.televip.virtuals.Theme;
+import com.my.televip.virtuals.ActionBar.Theme;
 import com.my.televip.virtuals.ui.ChatActivity;
 
 import de.robv.android.xposed.XposedHelpers;
@@ -25,14 +27,14 @@ public class ChatHook {
 
     private static boolean initialized = false;
 
-    public static void init(Context context, String className) {
-        if (initialized || ClientChecker.check(ClientChecker.ClientType.Nagram) || ClientChecker.check(ClientChecker.ClientType.TelegramPlus)) return;
+    public static void init(String className) {
+        if (initialized || ClientManager.is(ClientManager.Client.Nagram) || ClientManager.is(ClientManager.Client.TelegramPlus)) return;
 
         Class<?> clazz = ClassLoad.getClass(className);
-        if (clazz == null) FeatureStateManager.reset(context);
+        if (clazz == null) FeatureStateManager.reset();
         try {
             initialized = true;
-            HMethod.hookMethod(ClassLoad.getClass(ClassNames.CHAT_ACTIVITY), AutomationResolver.resolve("ChatActivity", "createView", AutomationResolver.ResolverType.Method), AutomationResolver.merge(AutomationResolver.resolveObject("createView", new Class[]{Context.class}), new AbstractMethodHook() {
+            HMethod.hookMethod(ClassLoad.getClass(ClassNames.CHAT_ACTIVITY), Obfuscate.getMethodName("ChatActivity", "createView"), ArgsResolver.merge("createView", new Class[]{Context.class}, new BaseMethodHook() {
                 @Override
                 protected void afterMethod(MethodHookParam param) {
                     try {
@@ -43,7 +45,7 @@ public class ChatHook {
 
                             int drawableResource = XposedHelpers.getStaticIntField(ClassLoad.getClass(ClassNames.DRAWABLE), "msg_go_up");
 
-                            if (!ClientChecker.check(ClientChecker.ClientType.iMe) && !ClientChecker.check(ClientChecker.ClientType.iMeWeb) && !ClientChecker.check(ClientChecker.ClientType.TelegramPlus) && !ClientChecker.check(ClientChecker.ClientType.XPlus) && !ClientChecker.check(ClientChecker.ClientType.forkgram) && !ClientChecker.check(ClientChecker.ClientType.forkgramBeta)) {
+                            if (!ClientManager.is(ClientManager.Client.iMe) && !ClientManager.is(ClientManager.Client.iMeWeb) && !ClientManager.is(ClientManager.Client.TelegramPlus) && !ClientManager.is(ClientManager.Client.XPlus) && !ClientManager.is(ClientManager.Client.forkgram) && !ClientManager.is(ClientManager.Client.forkgramBeta)) {
                                 headerItem.lazilyAddSubItem(8353847, drawableResource, Translator.get(Keys.ToTheBeginning));
                             }
                             drawableResource = XposedHelpers.getStaticIntField(ClassLoad.getClass(ClassNames.DRAWABLE), "player_new_order");
@@ -58,23 +60,23 @@ public class ChatHook {
                 }
             }));
 
-            XposedHelpers.findAndHookMethod(clazz, "onItemClick", int.class, new AbstractMethodHook() {
+            XposedHelpers.findAndHookMethod(clazz, "onItemClick", int.class, new BaseMethodHook() {
                 @Override
                 protected void afterMethod(MethodHookParam param) {
                     try {
                         int id = (int) param.args[0];
 
-                        final Object thisClass = XposedHelpers.getObjectField(param.thisObject, AutomationResolver.resolve("ChatActivity", "this$0", AutomationResolver.ResolverType.Field));
+                        final Object thisClass = XposedHelpers.getObjectField(param.thisObject, Obfuscate.getFieldName("ChatActivity", "this$0"));
                         ChatActivity chat = new ChatActivity(thisClass);
 
                         if (id == 8353847) {
                             chat.scrollToMessageId(1, 0, true, 0, true, 0);
                         } else if (id == 8353848) {
 
-                            AlertDialog dialog = new AlertDialog(context);
+                            AlertDialog dialog = new AlertDialog(Utils.getCurrentActivity());
                             dialog.setTitle(Translator.get(Keys.InputMessageId));
 
-                            EditText input = new EditText(context);
+                            EditText input = new EditText(Utils.getCurrentActivity());
                             input.setInputType(InputType.TYPE_CLASS_NUMBER);
                             if (Theme.isLight()) {
                                 input.setTextColor(0xFF000000);
@@ -93,7 +95,7 @@ public class ChatHook {
                             params.setMargins(20, 20, 20, 20);
                             input.setLayoutParams(params);
 
-                            LinearLayout layout = new LinearLayout(context);
+                            LinearLayout layout = new LinearLayout(Utils.getCurrentActivity());
                             layout.setOrientation(LinearLayout.VERTICAL);
                             layout.addView(input);
 
@@ -115,7 +117,7 @@ public class ChatHook {
                 }
             });
         } catch (Throwable t){
-            FeatureStateManager.reset(context);
+            FeatureStateManager.reset();
         }
     }
 }

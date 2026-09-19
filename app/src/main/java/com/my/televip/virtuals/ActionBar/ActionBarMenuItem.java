@@ -1,6 +1,7 @@
 package com.my.televip.virtuals.ActionBar;
 
-import com.my.televip.obfuscate.AutomationResolver;
+import com.my.televip.obfuscate.ArgsResolver;
+import com.my.televip.obfuscate.Obfuscate;
 
 import de.robv.android.xposed.XposedHelpers;
 
@@ -13,10 +14,10 @@ public class ActionBarMenuItem {
     }
 
     public void lazilyAddSubItem(int id, int resId, String name){
-        XposedHelpers.callMethod(actionBarMenuItem, AutomationResolver.resolve("ActionBarMenuItem", "lazilyAddSubItem", AutomationResolver.ResolverType.Method), id, resId, name);
+        XposedHelpers.callMethod(actionBarMenuItem, Obfuscate.getMethodName("ActionBarMenuItem", "lazilyAddSubItem"), id, resId, name);
     }
     public void addSubItem(int id, int resId, String name){
-        XposedHelpers.callMethod(actionBarMenuItem, AutomationResolver.resolve("ActionBarMenuItem", "addSubItem", AutomationResolver.ResolverType.Method), id, resId, name);
+        XposedHelpers.callMethod(actionBarMenuItem, Obfuscate.getMethodName("ActionBarMenuItem", "addSubItem"), id, resId, name);
     }
 
     public Object getActionBarMenuItem(){

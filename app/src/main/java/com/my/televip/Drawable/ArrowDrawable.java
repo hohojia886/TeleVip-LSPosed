@@ -8,7 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.drawable.Drawable;
 
-import com.my.televip.virtuals.Theme;
+import com.my.televip.ui.ThemeColors;
 
 public class ArrowDrawable extends Drawable {
 
@@ -18,7 +18,7 @@ public class ArrowDrawable extends Drawable {
     public ArrowDrawable() {
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setStyle(Paint.Style.FILL);
-        paint.setColor(Theme.getArrowDrawableColor());
+        paint.setColor(ThemeColors.getArrowDrawableColor());
 
         path = new Path();
         path.moveTo(20f, 11f);

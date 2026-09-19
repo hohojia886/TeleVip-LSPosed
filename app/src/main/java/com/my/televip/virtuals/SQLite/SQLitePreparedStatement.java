@@ -1,6 +1,7 @@
 package com.my.televip.virtuals.SQLite;
 
-import com.my.televip.obfuscate.AutomationResolver;
+import com.my.televip.obfuscate.ArgsResolver;
+import com.my.televip.obfuscate.Obfuscate;
 import com.my.televip.virtuals.tgnet.NativeByteBuffer;
 
 import de.robv.android.xposed.XposedHelpers;
@@ -14,27 +15,27 @@ public class SQLitePreparedStatement {
     }
 
     public void requery() {
-        XposedHelpers.callMethod(sQLitePreparedStatement, AutomationResolver.resolve("SQLitePreparedStatement","requery", AutomationResolver.ResolverType.Method));
+        XposedHelpers.callMethod(sQLitePreparedStatement, Obfuscate.getMethodName("SQLitePreparedStatement","requery"));
     }
 
     public void step() {
-        XposedHelpers.callMethod(sQLitePreparedStatement, AutomationResolver.resolve("SQLitePreparedStatement","step", AutomationResolver.ResolverType.Method));
+        XposedHelpers.callMethod(sQLitePreparedStatement, Obfuscate.getMethodName("SQLitePreparedStatement","step"));
     }
 
     public void dispose() {
-        XposedHelpers.callMethod(sQLitePreparedStatement, AutomationResolver.resolve("SQLitePreparedStatement","dispose", AutomationResolver.ResolverType.Method));
+        XposedHelpers.callMethod(sQLitePreparedStatement, Obfuscate.getMethodName("SQLitePreparedStatement","dispose"));
     }
 
     public void bindByteBuffer(int index, NativeByteBuffer value) {
-        XposedHelpers.callMethod(sQLitePreparedStatement, AutomationResolver.resolve("SQLitePreparedStatement","bindByteBuffer", AutomationResolver.ResolverType.Method), index, value.nativeByteBuffer);
+        XposedHelpers.callMethod(sQLitePreparedStatement, Obfuscate.getMethodName("SQLitePreparedStatement","bindByteBuffer"), index, value.nativeByteBuffer);
     }
 
     public void bindLong(int index, long value) {
-        XposedHelpers.callMethod(sQLitePreparedStatement, AutomationResolver.resolve("SQLitePreparedStatement","bindLong", AutomationResolver.ResolverType.Method), index, value);
+        XposedHelpers.callMethod(sQLitePreparedStatement, Obfuscate.getMethodName("SQLitePreparedStatement","bindLong"), index, value);
     }
 
     public void bindInteger(int index, int value) {
-        XposedHelpers.callMethod(sQLitePreparedStatement, AutomationResolver.resolve("SQLitePreparedStatement","bindInteger", AutomationResolver.ResolverType.Method), index, value);
+        XposedHelpers.callMethod(sQLitePreparedStatement, Obfuscate.getMethodName("SQLitePreparedStatement","bindInteger"), index, value);
     }
 
 }

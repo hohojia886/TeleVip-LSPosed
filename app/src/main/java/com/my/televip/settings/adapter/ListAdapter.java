@@ -10,11 +10,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.my.televip.settings.controller.SettingsController;
 import com.my.televip.settings.ui.SettingsAdapter;
 import com.my.televip.virtuals.TeleVip.Bridge.Bridge;
-import com.my.televip.virtuals.ui.Cells.ExpandableTextCheckCell;
+import com.my.televip.ui.Cells.ExpandableTextCheckCell;
 import com.my.televip.virtuals.ui.Cells.HeaderCell;
 import com.my.televip.virtuals.ui.Cells.ShadowSectionCell;
 import com.my.televip.virtuals.ui.Cells.TextCheckCell;
-import com.my.televip.virtuals.ui.Cells.TextInfoCell;
+import com.my.televip.ui.Cells.TextInfoCell;
 import com.my.televip.virtuals.ui.Cells.TextSettingsCell;
 
 public class ListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

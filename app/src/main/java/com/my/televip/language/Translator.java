@@ -1,17 +1,14 @@
 package com.my.televip.language;
 
-import com.my.televip.utils.Utils;
 import com.my.televip.logging.Logger;
+import com.my.televip.utils.JsonAssetReader;
 import com.my.televip.virtuals.messenger.LocaleController;
 
 import org.json.JSONObject;
 
-import java.io.InputStream;
-import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 public class Translator {
 
@@ -28,45 +25,17 @@ public class Translator {
             Logger.e(e);
         }
     }
-
     private static void loadAllLanguages() {
-        try (ZipFile zipFile = new ZipFile(Utils.modulePath)) {
+        List<String> files = JsonAssetReader.listFiles("assets/lang/", ".json");
 
-            Enumeration<? extends ZipEntry> entries = zipFile.entries();
+        for (String fileName : files) {
+            String langCode = fileName.substring(0, fileName.lastIndexOf('.'));
 
-            while (entries.hasMoreElements()) {
-                ZipEntry entry = entries.nextElement();
-
-                String name = entry.getName();
-
-                if (name.startsWith("assets/lang/") && name.endsWith(".json")) {
-
-                    String langCode = name.substring(
-                            name.lastIndexOf("/") + 1,
-                            name.lastIndexOf(".")
-                    );
-
-                    InputStream is = zipFile.getInputStream(entry);
-                    String json = readFully(is);
-                    is.close();
-
-                    langMap.put(langCode, new JSONObject(json));
-                }
+            JSONObject json = JsonAssetReader.readObject("assets/lang/" + fileName);
+            if (json != null) {
+                langMap.put(langCode, json);
             }
-
-        } catch (Throwable e) {
-            Logger.e(e);
         }
-    }
-
-    private static String readFully(InputStream is) throws Exception {
-        java.io.ByteArrayOutputStream baos = new java.io.ByteArrayOutputStream();
-        byte[] buffer = new byte[4096];
-        int bytesRead;
-        while ((bytesRead = is.read(buffer)) != -1) {
-            baos.write(buffer, 0, bytesRead);
-        }
-        return baos.toString("UTF-8");
     }
 
     public static String get(String key) {

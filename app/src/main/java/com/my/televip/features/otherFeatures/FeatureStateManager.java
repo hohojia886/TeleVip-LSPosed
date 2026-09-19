@@ -1,8 +1,6 @@
 package com.my.televip.features.otherFeatures;
 
 
-import android.content.Context;
-
 import com.my.televip.Configs.ConfigPreferences;
 
 public class FeatureStateManager {
@@ -40,11 +38,11 @@ public class FeatureStateManager {
         ConfigPreferences.putString(KEY_PROFILE, className);
     }
 
-    public static void reset(Context context) {
+    public static void reset() {
         ConfigPreferences.remove(KEY_CHAT);
         ConfigPreferences.remove(KEY_CHAT_BOOL);
         ConfigPreferences.remove(KEY_PROFILE);
         ConfigPreferences.remove(KEY_PROFILE_BOOL);
-        FeatureInitializer.init(context);
+        FeatureInitializer.init();
     }
 }

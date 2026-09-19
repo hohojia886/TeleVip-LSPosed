@@ -1,6 +1,7 @@
 package com.my.televip.virtuals.Adapters;
 
-import com.my.televip.obfuscate.AutomationResolver;
+import com.my.televip.obfuscate.ArgsResolver;
+import com.my.televip.obfuscate.Obfuscate;
 
 import java.util.ArrayList;
 
@@ -15,7 +16,7 @@ public class DrawerLayoutAdapter {
     }
 
     public ArrayList<?> getItems(){
-        return (ArrayList<?>) XposedHelpers.getObjectField(drawerLayout, AutomationResolver.resolve("DrawerLayoutAdapter", "items", AutomationResolver.ResolverType.Field));
+        return (ArrayList<?>) XposedHelpers.getObjectField(drawerLayout, Obfuscate.getFieldName("DrawerLayoutAdapter", "items"));
     }
 
 }

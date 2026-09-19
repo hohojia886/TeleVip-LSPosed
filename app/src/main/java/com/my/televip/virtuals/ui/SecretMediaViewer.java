@@ -2,11 +2,12 @@ package com.my.televip.virtuals.ui;
 
 import com.my.televip.Class.ClassNames;
 import com.my.televip.Configs.ConfigManager;
-import com.my.televip.base.AbstractMethodHook;
-import com.my.televip.features.SecretMediaSave;
+import com.my.televip.base.BaseMethodHook;
+import com.my.televip.features.media.SecretMediaSave;
 import com.my.televip.hooks.HMethod;
 import com.my.televip.Class.ClassLoad;
-import com.my.televip.obfuscate.AutomationResolver;
+import com.my.televip.obfuscate.ArgsResolver;
+import com.my.televip.obfuscate.Obfuscate;
 import com.my.televip.logging.Logger;
 import com.my.televip.virtuals.messenger.FileLoader;
 import com.my.televip.virtuals.messenger.MessageObject;
@@ -26,7 +27,7 @@ public class SecretMediaViewer {
 
                 if (ClassLoad.getClass(ClassNames.SECRET_MEDIA_VIEWER) == null) return;
 
-                HMethod.hookMethod(ClassLoad.getClass(ClassNames.SECRET_MEDIA_VIEWER), AutomationResolver.resolve("SecretMediaViewer", "openMedia", AutomationResolver.ResolverType.Method), AutomationResolver.merge(AutomationResolver.resolveObject("openMedia", new Class[]{ClassLoad.getClass(ClassNames.MESSAGE_OBJECT), ClassLoad.getClass(ClassNames.PHOTO_VIEWER_PROVIDER), java.lang.Runnable.class, java.lang.Runnable.class}), new AbstractMethodHook() {
+                HMethod.hookMethod(ClassLoad.getClass(ClassNames.SECRET_MEDIA_VIEWER), Obfuscate.getMethodName("SecretMediaViewer", "openMedia"), ArgsResolver.merge("openMedia", new Class[]{ClassLoad.getClass(ClassNames.MESSAGE_OBJECT), ClassLoad.getClass(ClassNames.PHOTO_VIEWER_PROVIDER), java.lang.Runnable.class, java.lang.Runnable.class}, new BaseMethodHook() {
                     @Override
                     protected void beforeMethod(MethodHookParam param) {
                         boolean secretMediaSave = ConfigManager.secretMediaSave != null && ConfigManager.secretMediaSave.isEnable();
@@ -37,7 +38,7 @@ public class SecretMediaViewer {
                             MessageObject messageObject = new MessageObject(param.args[0]);
                             if (messageObject.getMessageObject() != null) {
                                 TLRPC.Message messageOwner = messageObject.getMessageOwner();
-                                if (messageOwner.message != null) {
+                                if (messageOwner.get_Message() != null) {
                                     messageOwner.setTtl(0);
                                 }
                             }
@@ -52,7 +53,7 @@ public class SecretMediaViewer {
                                 File image = fileLoader.getLocalFile(object.getImageReceiver().getImageLocation());
                                 if (image != null) {
                                     SecretMediaSave.pathImage = image;
-                                    SecretMediaSave.id = messageObject.getMessageOwner().getID();
+                                    SecretMediaSave.id = messageObject.getMessageOwner().getId();
                                 }
                                 PhotoViewer.getInstance().openPhoto(messageObject, messageObject.getDialogId(), 0L, 0L, provider, false);
                                 param.setResult(null);

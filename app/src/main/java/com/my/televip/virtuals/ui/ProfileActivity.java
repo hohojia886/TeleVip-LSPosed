@@ -1,6 +1,6 @@
 package com.my.televip.virtuals.ui;
 
-import com.my.televip.obfuscate.AutomationResolver;
+import com.my.televip.obfuscate.Obfuscate;
 import com.my.televip.virtuals.ActionBar.ActionBarMenuItem;
 
 import de.robv.android.xposed.XposedHelpers;
@@ -14,23 +14,23 @@ public class ProfileActivity {
     }
 
     public long getChatId(){
-        return XposedHelpers.getLongField(profileActivity, AutomationResolver.resolve("ProfileActivity", "chatId", AutomationResolver.ResolverType.Field));
+        return XposedHelpers.getLongField(profileActivity, Obfuscate.getFieldName("ProfileActivity", "chatId"));
     }
 
     public long getUserId(){
-        return XposedHelpers.getLongField(profileActivity, AutomationResolver.resolve("ProfileActivity", "userId", AutomationResolver.ResolverType.Field));
+        return XposedHelpers.getLongField(profileActivity, Obfuscate.getFieldName("ProfileActivity", "userId"));
     }
 
     public Object[] getNameTextView(){
-        return  (Object[]) XposedHelpers.getObjectField(profileActivity, AutomationResolver.resolve("ProfileActivity", "nameTextView", AutomationResolver.ResolverType.Field));
+        return  (Object[]) XposedHelpers.getObjectField(profileActivity, Obfuscate.getFieldName("ProfileActivity", "nameTextView"));
     }
 
     public Object[] getOnlineTextView(){
-        return  (Object[]) XposedHelpers.getObjectField(profileActivity, AutomationResolver.resolve("ProfileActivity", "onlineTextView", AutomationResolver.ResolverType.Field));
+        return  (Object[]) XposedHelpers.getObjectField(profileActivity, Obfuscate.getFieldName("ProfileActivity", "onlineTextView"));
     }
 
     public ActionBarMenuItem getOtherItem(){
-        return new ActionBarMenuItem(XposedHelpers.getObjectField(profileActivity, AutomationResolver.resolve("ProfileActivity", "otherItem", AutomationResolver.ResolverType.Field)));
+        return new ActionBarMenuItem(XposedHelpers.getObjectField(profileActivity, Obfuscate.getFieldName("ProfileActivity", "otherItem")));
     }
 
 

@@ -13,27 +13,29 @@ import android.widget.Toast;
 import com.my.televip.Class.ClassLoad;
 import com.my.televip.Class.ClassNames;
 import com.my.televip.Configs.ConfigManager;
-import com.my.televip.base.AbstractMethodHook;
+import com.my.televip.base.BaseMethodHook;
 import com.my.televip.hooks.HMethod;
 import com.my.televip.language.Keys;
 import com.my.televip.language.Translator;
 import com.my.televip.logging.Logger;
-import com.my.televip.obfuscate.AutomationResolver;
+import com.my.televip.obfuscate.ArgsResolver;
+import com.my.televip.obfuscate.Obfuscate;
+import com.my.televip.ui.ThemeColors;
+import com.my.televip.utils.Utils;
 import com.my.televip.virtuals.ActionBar.SimpleTextView;
-import com.my.televip.virtuals.Theme;
 import com.my.televip.virtuals.ui.ProfileActivity;
 
 public class EditOnlineTextView {
     public static boolean isEnable = false;
 
-    public static void init(Context context) {
+    public static void init() {
         try {
             if (!isEnable) {
                 isEnable = true;
                 HMethod.hookMethod(ClassLoad.getClass(ClassNames.PROFILE_ACTIVITY),
-                        AutomationResolver.resolve("ProfileActivity", "updateProfileData", AutomationResolver.ResolverType.Method),
-                        AutomationResolver.merge(AutomationResolver.resolveObject("updateProfileData", new Class[]{boolean.class}),
-                                new AbstractMethodHook() {
+                        Obfuscate.getMethodName("ProfileActivity", "updateProfileData"),
+                        ArgsResolver.merge("updateProfileData", new Class[]{boolean.class},
+                                new BaseMethodHook() {
                                     @Override
                                     protected void afterMethod(MethodHookParam param) {
                                         final ProfileActivity profileActivity = new ProfileActivity(param.thisObject);
@@ -69,15 +71,15 @@ public class EditOnlineTextView {
                                                     sb.append("ID: ").append(id);
 
                                                     sb.setSpan(new RelativeSizeSpan(1.0f), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                                                    sb.setSpan(new ForegroundColorSpan(Theme.getTextColor()), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                                                    sb.setSpan(new ForegroundColorSpan(ThemeColors.getTextColor()), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                                                     simpleTextView2.setMaxLines(2);
                                                     simpleTextView2.setText(sb, true);
                                                     simpleTextView2.getSimpleTextView().setOnClickListener(v -> {
                                                         if (simpleTextView2.getText() != null) {
                                                             String name = Translator.get(Keys.Copied, id);
-                                                            ((ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText("clipboard", id));
-                                                            Toast.makeText(context, name, Toast.LENGTH_LONG).show();
+                                                            ((ClipboardManager) Utils.getCurrentActivity().getSystemService(Context.CLIPBOARD_SERVICE)).setPrimaryClip(ClipData.newPlainText("clipboard", id));
+                                                            Toast.makeText(Utils.getCurrentActivity(), name, Toast.LENGTH_LONG).show();
                                                         }
                                                     });
                                                 }
