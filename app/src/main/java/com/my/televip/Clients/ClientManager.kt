@@ -1,0 +1,79 @@
+package com.my.televip.Clients
+
+import com.my.televip.Class.ClassLoad
+import com.my.televip.Class.ClassNames
+import com.my.televip.utils.Utils
+
+object ClientManager {
+
+    enum class Client(
+        val pkg: String,
+        val isTgnetObfuscated: Boolean = false,
+        val resolverClass: Class<*>? = null
+    ) {
+        Telegram("org.telegram.messenger"),
+        TelegramWeb("org.telegram.messenger.web"),
+        TelegramPlus("org.telegram.plus"),
+        TGConnect("com.tgconnect.android"),
+        Nagram("xyz.nextalone.nagram", resolverClass = Nagram::class.java),
+        Nicegram("app.nicegram", resolverClass = Nicegram::class.java),
+        TelegramBeta("org.telegram.messenger.beta"),
+        NagramX("nu.gpu.nagram"),
+        XPlus("com.xplus.messenger"),
+        iMe("com.iMe.android"),
+        iMeWeb("com.iMe.android.web"),
+        forkgram("org.forkgram.messenger"),
+        forkgramBeta("org.forkclient.messenger.beta"),
+        Telegraph("ir.ilmili.telegraph", resolverClass = Telegraph::class.java),
+        Telega("ru.dahl.messenger"),
+        Momogram("nekox.messenger.broken", resolverClass = Momogram::class.java),
+        Nekogram("tw.nekomimi.nekogram", isTgnetObfuscated = true),
+        Cherrygram("uz.unnarsx.cherrygram", isTgnetObfuscated = true),
+        ForkgramClassic("org.forkgram.classic"),
+        Turrit("org.telegram.group", resolverClass = Turrit::class.java),
+        NagramXF("fork.risin42.nagramx");
+
+        fun hasPackage(pkg: String?): Boolean {
+            return this.pkg == pkg
+        }
+    }
+
+    @JvmStatic
+    fun `is`(client: Client): Boolean {
+        return `is`(client, Utils.pkgName)
+    }
+
+    @JvmStatic
+    fun `is`(client: Client, pkg: String?): Boolean {
+        return client.hasPackage(pkg)
+    }
+
+    @JvmStatic
+    fun getCurrent(): Client? {
+        val currentPkg = Utils.pkgName
+        for (client in Client.entries) {
+            if (client.hasPackage(currentPkg)) {
+                return client
+            }
+        }
+        return null
+    }
+
+    @JvmStatic
+    fun isTgnetObfuscated(): Boolean {
+        val client = getCurrent()
+        return client != null && client.isTgnetObfuscated
+    }
+
+    @JvmStatic
+    fun containsPackage(pkg: String?, classLoader: ClassLoader?): Boolean {
+        for (client in Client.entries) {
+            if (client.hasPackage(pkg)) {
+                return true
+            }
+        }
+        return ClassLoad.getClass(ClassNames.CONNECTIONS_MANAGER, classLoader, false) != null &&
+                ClassLoad.getClass(ClassNames.MESSAGES_CONTROLLER, classLoader, false) != null &&
+                ClassLoad.getClass(ClassNames.MESSAGES_STORAGE, classLoader, false) != null
+    }
+}
