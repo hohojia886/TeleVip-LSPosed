@@ -49,13 +49,30 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }
 tasks.register("copyLargestDexAsJava") {
-
     dependsOn(":settingsadapter:assembleDebug")
+    inputs.files(project(":settingsadapter").tasks.named("assembleDebug"))
+    outputs.file("$projectDir/src/main/java/com/my/televip/dex/DexHolder.kt")
 
     doLast {
-        def apkFile = fileTree("$rootDir/settingsadapter/build/outputs/apk/debug")
-                .matching { include "*.apk" }
-                .singleFile
+        def apkDir = file("$rootDir/settingsadapter/build/outputs/apk/debug")
+        def apkFiles = fileTree(apkDir).matching {
+            include "*.apk"
+            exclude "*androidTest*.apk"
+            exclude "*unaligned*.apk"
+        }.files
+
+        if (apkFiles.isEmpty()) {
+            apkFiles = fileTree("$rootDir/settingsadapter/build").matching {
+                include "**/*.apk"
+                exclude "*androidTest*.apk"
+                exclude "*unaligned*.apk"
+            }.files
+        }
+
+        if (apkFiles.isEmpty()) {
+            throw new GradleException("No settingsadapter APK file found! Please run :settingsadapter:assembleDebug first.")
+        }
+        def apkFile = apkFiles.first()
 
         def tempDir = new File(buildDir, "tmp/dexExtract")
         tempDir.mkdirs()
