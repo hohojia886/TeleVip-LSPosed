@@ -9,14 +9,14 @@ object ClientManager {
     enum class Client(
         val pkg: String,
         val isTgnetObfuscated: Boolean = false,
-        val resolverClass: Class<*>? = null
+        private val resolverClassName: String? = null
     ) {
         Telegram("org.telegram.messenger"),
         TelegramWeb("org.telegram.messenger.web"),
         TelegramPlus("org.telegram.plus"),
         TGConnect("com.tgconnect.android"),
-        Nagram("xyz.nextalone.nagram", resolverClass = Nagram::class.java),
-        Nicegram("app.nicegram", resolverClass = Nicegram::class.java),
+        Nagram("xyz.nextalone.nagram", resolverClassName = "com.my.televip.Clients.Nagram"),
+        Nicegram("app.nicegram", resolverClassName = "com.my.televip.Clients.Nicegram"),
         TelegramBeta("org.telegram.messenger.beta"),
         NagramX("nu.gpu.nagram"),
         XPlus("com.xplus.messenger"),
@@ -24,14 +24,23 @@ object ClientManager {
         iMeWeb("com.iMe.android.web"),
         forkgram("org.forkgram.messenger"),
         forkgramBeta("org.forkclient.messenger.beta"),
-        Telegraph("ir.ilmili.telegraph", resolverClass = Telegraph::class.java),
+        Telegraph("ir.ilmili.telegraph", resolverClassName = "com.my.televip.Clients.Telegraph"),
         Telega("ru.dahl.messenger"),
-        Momogram("nekox.messenger.broken", resolverClass = Momogram::class.java),
+        Momogram("nekox.messenger.broken", resolverClassName = "com.my.televip.Clients.Momogram"),
         Nekogram("tw.nekomimi.nekogram", isTgnetObfuscated = true),
         Cherrygram("uz.unnarsx.cherrygram", isTgnetObfuscated = true),
         ForkgramClassic("org.forkgram.classic"),
-        Turrit("org.telegram.group", resolverClass = Turrit::class.java),
+        Turrit("org.telegram.group", resolverClassName = "com.my.televip.Clients.Turrit"),
         NagramXF("fork.risin42.nagramx");
+
+        val resolverClass: Class<*>?
+            get() = resolverClassName?.let {
+                try {
+                    Class.forName(it)
+                } catch (e: Throwable) {
+                    null
+                }
+            }
 
         fun hasPackage(pkg: String?): Boolean {
             return this.pkg == pkg
