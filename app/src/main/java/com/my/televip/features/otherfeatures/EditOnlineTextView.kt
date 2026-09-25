@@ -1,4 +1,4 @@
-package com.my.televip.features.otherFeatures
+package com.my.televip.features.otherfeatures
 
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -8,9 +8,9 @@ import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.text.style.RelativeSizeSpan
 import android.widget.Toast
-import com.my.televip.Class.ClassLoad
-import com.my.televip.Class.ClassNames
-import com.my.televip.Configs.ConfigManager
+import com.my.televip.clazz.ClassLoad
+import com.my.televip.clazz.ClassNames
+import com.my.televip.configs.ConfigManager
 import com.my.televip.base.BaseMethodHook
 import com.my.televip.language.Keys
 import com.my.televip.language.Translator

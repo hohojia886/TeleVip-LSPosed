@@ -5,8 +5,8 @@ import android.content.Context
 import android.util.TypedValue
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import com.my.televip.Class.ClassLoad
-import com.my.televip.Class.ClassNames
+import com.my.televip.clazz.ClassLoad
+import com.my.televip.clazz.ClassNames
 import com.my.televip.base.BaseMethodHook
 import com.my.televip.dex.DexInjector
 import com.my.televip.hooks.HMethod

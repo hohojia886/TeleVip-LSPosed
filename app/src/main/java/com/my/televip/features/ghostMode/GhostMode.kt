@@ -1,9 +1,9 @@
 package com.my.televip.features.ghostMode
 
-import com.my.televip.Class.ClassLoad
-import com.my.televip.Class.ClassNames
-import com.my.televip.Clients.ClientManager
-import com.my.televip.Configs.ConfigManager
+import com.my.televip.clazz.ClassLoad
+import com.my.televip.clazz.ClassNames
+import com.my.televip.clients.ClientManager
+import com.my.televip.configs.ConfigManager
 import com.my.televip.base.BaseMethodHook
 import com.my.televip.logging.Logger
 import com.my.televip.obfuscate.ArgsResolver
@@ -15,11 +15,20 @@ object GhostMode {
     @JvmField
     var isEnable: Boolean = false
 
+    private var updateStatusClass: Class<*>? = null
+
     @JvmStatic
     fun init() {
         try {
             if (!isEnable) {
                 isEnable = true
+                
+                updateStatusClass = if (!ClientManager.isTgnetObfuscated()) {
+                    null // Will use string match fallback
+                } else {
+                    ClassLoad.getClass(ClassNames.TL_ACCOUNT_UPDATE_STATUS)
+                }
+                HideSeen.initClasses()
                 val connClass = ClassLoad.getClass(ClassNames.CONNECTIONS_MANAGER)
                 if (connClass != null && ConfigManager.isGhostMode()) {
                     val methodName = Obfuscate.getMethodName("ConnectionsManager", "sendRequestInternal")
@@ -95,7 +104,7 @@ object GhostMode {
         return if (!ClientManager.isTgnetObfuscated()) {
             objectParam.javaClass.name.contains("TL_account\$updateStatus")
         } else {
-            objectParam.javaClass == ClassLoad.getClass(ClassNames.TL_ACCOUNT_UPDATE_STATUS)
+            updateStatusClass?.isInstance(objectParam) == true || objectParam.javaClass == updateStatusClass
         }
     }
 }

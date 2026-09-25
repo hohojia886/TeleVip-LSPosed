@@ -1,7 +1,7 @@
-package com.my.televip.Clients
+package com.my.televip.clients
 
-import com.my.televip.Class.ClassLoad
-import com.my.televip.Class.ClassNames
+import com.my.televip.clazz.ClassLoad
+import com.my.televip.clazz.ClassNames
 import com.my.televip.hooks.HMethod
 import com.my.televip.logging.Logger
 import de.robv.android.xposed.XC_MethodHook

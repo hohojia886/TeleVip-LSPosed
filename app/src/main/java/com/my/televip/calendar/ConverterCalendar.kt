@@ -1,6 +1,6 @@
 package com.my.televip.calendar
 
-import com.my.televip.Configs.ConfigManager
+import com.my.televip.configs.ConfigManager
 import com.my.televip.language.Keys
 import com.my.televip.language.Translator
 import ir.huri.jcal.JalaliCalendar

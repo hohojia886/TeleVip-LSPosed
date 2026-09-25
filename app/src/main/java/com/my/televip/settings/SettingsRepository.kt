@@ -1,6 +1,6 @@
 package com.my.televip.settings
 
-import com.my.televip.Configs.ConfigPreferences
+import com.my.televip.configs.ConfigPreferences
 import com.my.televip.language.Keys
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

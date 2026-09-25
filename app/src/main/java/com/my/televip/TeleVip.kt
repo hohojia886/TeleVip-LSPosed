@@ -1,6 +1,6 @@
 package com.my.televip
 
-import com.my.televip.Configs.ConfigManager
+import com.my.televip.configs.ConfigManager
 import com.my.televip.application.AndroidUtilities
 import com.my.televip.dex.DexInjector
 import com.my.televip.language.Translator

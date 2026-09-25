@@ -1,4 +1,4 @@
-package com.my.televip.Database
+package com.my.televip.database
 
 import android.content.ContentValues
 import android.content.Context
@@ -7,10 +7,10 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.my.televip.logging.Logger
 import com.my.televip.messages.MessageStorage
-import java.io.File
+import com.my.televip.application.ApplicationLoaderHook
 import java.util.Calendar
 
-class MessageDatabase(context: Context?) : SQLiteOpenHelper(context, dataBasePath, null, 1) {
+class MessageDatabase(context: Context?) : SQLiteOpenHelper(context, context?.getDatabasePath("saveMessages.db")?.absolutePath ?: dataBasePath, null, 1) {
 
     override fun onCreate(db: SQLiteDatabase) {
         val tableCreate = ("CREATE TABLE " + TABLE_MESSAGES + " (" +
@@ -21,6 +21,7 @@ class MessageDatabase(context: Context?) : SQLiteOpenHelper(context, dataBasePat
                 COLUMN_MESSAGE_DATE + " LONG " +
                 ");")
         db.execSQL(tableCreate)
+        db.execSQL("CREATE INDEX IF NOT EXISTS idx_messages_id_msg ON $TABLE_MESSAGES($COLUMN_ID, $COLUMN_MSG_ID);")
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -191,6 +192,6 @@ class MessageDatabase(context: Context?) : SQLiteOpenHelper(context, dataBasePat
 
         @JvmStatic
         val dataBasePath: String
-            get() = File(MessageStorage.getStorageFile(), "saveMessages.db").absolutePath
+            get() = ApplicationLoaderHook.getApplicationContext().getDatabasePath("saveMessages.db").absolutePath
     }
 }

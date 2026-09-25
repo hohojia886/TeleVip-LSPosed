@@ -1,6 +1,6 @@
-package com.my.televip.Class
+package com.my.televip.clazz
 
-import com.my.televip.Clients.ClientManager
+import com.my.televip.clients.ClientManager
 import com.my.televip.logging.Logger
 import com.my.televip.obfuscate.Obfuscate
 import com.my.televip.utils.Utils

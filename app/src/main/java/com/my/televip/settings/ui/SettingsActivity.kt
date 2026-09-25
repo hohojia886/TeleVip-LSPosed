@@ -5,9 +5,9 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.my.televip.Audio
-import com.my.televip.Class.ClassLoad
-import com.my.televip.Class.ClassNames
-import com.my.televip.Drawable.ArrowDrawable
+import com.my.televip.clazz.ClassLoad
+import com.my.televip.clazz.ClassNames
+import com.my.televip.drawable.ArrowDrawable
 import com.my.televip.base.BaseMethodHook
 import com.my.televip.dex.DexInjector
 import com.my.televip.hooks.HMethod

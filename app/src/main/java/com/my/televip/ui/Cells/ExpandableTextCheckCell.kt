@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.widget.LinearLayout
-import com.my.televip.Configs.ConfigItem
+import com.my.televip.configs.ConfigItem
 import com.my.televip.language.Translator
 import com.my.televip.settings.ui.SettingsAdapter
 import com.my.televip.virtuals.TeleVip.Bridge.Bridge

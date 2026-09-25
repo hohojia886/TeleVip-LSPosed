@@ -1,4 +1,4 @@
-package com.my.televip.Database
+package com.my.televip.database
 
 data class MessageEntity(
     @JvmField val id: Long,

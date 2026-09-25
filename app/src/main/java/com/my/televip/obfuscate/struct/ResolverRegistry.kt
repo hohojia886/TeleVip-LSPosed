@@ -1,6 +1,6 @@
 package com.my.televip.obfuscate.struct
 
-import com.my.televip.Clients.ClientManager
+import com.my.televip.clients.ClientManager
 
 class ResolverRegistry(private val clazz: Class<*>?) {
 

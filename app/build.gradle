@@ -124,3 +124,22 @@ object DexHolder {
 }
 
 preBuild.dependsOn("copyLargestDexAsJava")
+
+tasks.register("massReplacePackages") {
+    doLast {
+        fileTree(dir: "src/main/java/com/my/televip", include: ["**/*.kt", "**/*.java"]).each { file ->
+            def content = file.text
+            def newContent = content.replaceAll("package com\\.my\\.televip\\.Callback", "package com.my.televip.callback")
+            newContent = newContent.replaceAll("package com\\.my\\.televip\\.Class", "package com.my.televip.clazz")
+            newContent = newContent.replaceAll("package com\\.my\\.televip\\.Configs", "package com.my.televip.configs")
+            newContent = newContent.replaceAll("package com\\.my\\.televip\\.Database", "package com.my.televip.database")
+            newContent = newContent.replaceAll("package com\\.my\\.televip\\.Drawable", "package com.my.televip.drawable")
+            newContent = newContent.replaceAll("package com\\.my\\.televip\\.Clients", "package com.my.televip.clients")
+            newContent = newContent.replaceAll("package com\\.my\\.televip\\.features\\.otherFeatures", "package com.my.televip.features.otherfeatures")
+            if (content != newContent) {
+                file.text = newContent
+                println "Updated package declaration in " + file.name
+            }
+        }
+    }
+}

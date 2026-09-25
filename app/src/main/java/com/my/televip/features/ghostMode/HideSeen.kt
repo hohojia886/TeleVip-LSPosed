@@ -1,10 +1,10 @@
 package com.my.televip.features.ghostMode
 
-import com.my.televip.Callback.IntCallback
-import com.my.televip.Class.ClassLoad
-import com.my.televip.Class.ClassNames
-import com.my.televip.Clients.ClientManager
-import com.my.televip.Configs.ConfigManager
+import com.my.televip.callback.IntCallback
+import com.my.televip.clazz.ClassLoad
+import com.my.televip.clazz.ClassNames
+import com.my.televip.clients.ClientManager
+import com.my.televip.configs.ConfigManager
 import com.my.televip.application.AndroidUtilities
 import com.my.televip.logging.Logger
 import com.my.televip.obfuscate.Obfuscate
@@ -28,8 +28,27 @@ object HideSeen {
     @JvmField
     var isReadMessages: Boolean = false
 
+    private var tlMessagesReadHistoryClass: Class<*>? = null
+    private var tlChannelsReadHistoryClass: Class<*>? = null
+    private var tlMessagesReadDiscussionClass: Class<*>? = null
+    private var tlMessagesReadEncryptedHistoryClass: Class<*>? = null
+    private var tlMessagesReadMessageContentsClass: Class<*>? = null
+    private var tlChannelsReadMessageContentsClass: Class<*>? = null
+
+    fun initClasses() {
+        if (ClientManager.isTgnetObfuscated() && tlMessagesReadHistoryClass == null) {
+            tlMessagesReadHistoryClass = ClassLoad.getClass(Obfuscate.getClassName(ClassNames.TL_MESSAGES_READ_HISTORY))
+            tlChannelsReadHistoryClass = ClassLoad.getClass(Obfuscate.getClassName(ClassNames.TL_CHANNELS_READ_HISTORY))
+            tlMessagesReadDiscussionClass = ClassLoad.getClass(Obfuscate.getClassName(ClassNames.TL_MESSAGES_READ_DISCUSSION))
+            tlMessagesReadEncryptedHistoryClass = ClassLoad.getClass(Obfuscate.getClassName(ClassNames.TL_MESSAGES_READ_ENCRYPTED_HISTORY))
+            tlMessagesReadMessageContentsClass = ClassLoad.getClass(Obfuscate.getClassName(ClassNames.TL_MESSAGES_READ_MESSAGE_CONTENTS))
+            tlChannelsReadMessageContentsClass = ClassLoad.getClass(Obfuscate.getClassName(ClassNames.TL_CHANNELS_READ_MESSAGE_CONTENTS))
+        }
+    }
+
     @JvmStatic
     fun sendFakeReadResponse(onCompleteOrig: Any?) {
+        if (onCompleteOrig == null) return
         try {
             val fakeRes = TLRPC.TL_messages_affectedMessages()
             fakeRes.setPts(-1)
@@ -54,7 +73,7 @@ object HideSeen {
         return if (!ClientManager.isTgnetObfuscated()) {
             objectParam.javaClass.name.contains("TL_messages_readHistory")
         } else {
-            objectParam.javaClass.name == Obfuscate.getClassName(ClassNames.TL_MESSAGES_READ_HISTORY)
+            tlMessagesReadHistoryClass?.isInstance(objectParam) == true || objectParam.javaClass == tlMessagesReadHistoryClass
         }
     }
 
@@ -63,7 +82,7 @@ object HideSeen {
         return if (!ClientManager.isTgnetObfuscated()) {
             objectParam.javaClass.name.contains("TL_channels_readHistory")
         } else {
-            objectParam.javaClass.name == Obfuscate.getClassName(ClassNames.TL_CHANNELS_READ_HISTORY)
+            tlChannelsReadHistoryClass?.isInstance(objectParam) == true || objectParam.javaClass == tlChannelsReadHistoryClass
         }
     }
 
@@ -91,12 +110,12 @@ object HideSeen {
         } else {
             val objectClass = objectParam.javaClass
 
-            readHistory = objectClass == ClassLoad.getClass(Obfuscate.getClassName(ClassNames.TL_MESSAGES_READ_HISTORY))
-            readDiscussion = objectClass == ClassLoad.getClass(Obfuscate.getClassName(ClassNames.TL_MESSAGES_READ_DISCUSSION))
-            encryptedHistory = objectClass == ClassLoad.getClass(Obfuscate.getClassName(ClassNames.TL_MESSAGES_READ_ENCRYPTED_HISTORY))
-            readMessageContents = objectClass == ClassLoad.getClass(Obfuscate.getClassName(ClassNames.TL_MESSAGES_READ_MESSAGE_CONTENTS))
-            channelReadMessageContents = objectClass == ClassLoad.getClass(Obfuscate.getClassName(ClassNames.TL_CHANNELS_READ_MESSAGE_CONTENTS))
-            channelReadHistory = objectClass == ClassLoad.getClass(Obfuscate.getClassName(ClassNames.TL_CHANNELS_READ_HISTORY))
+            readHistory = tlMessagesReadHistoryClass?.isInstance(objectParam) == true || objectClass == tlMessagesReadHistoryClass
+            readDiscussion = tlMessagesReadDiscussionClass?.isInstance(objectParam) == true || objectClass == tlMessagesReadDiscussionClass
+            encryptedHistory = tlMessagesReadEncryptedHistoryClass?.isInstance(objectParam) == true || objectClass == tlMessagesReadEncryptedHistoryClass
+            readMessageContents = tlMessagesReadMessageContentsClass?.isInstance(objectParam) == true || objectClass == tlMessagesReadMessageContentsClass
+            channelReadMessageContents = tlChannelsReadMessageContentsClass?.isInstance(objectParam) == true || objectClass == tlChannelsReadMessageContentsClass
+            channelReadHistory = tlChannelsReadHistoryClass?.isInstance(objectParam) == true || objectClass == tlChannelsReadHistoryClass
         }
 
         if (!(readHistory || readDiscussion ||

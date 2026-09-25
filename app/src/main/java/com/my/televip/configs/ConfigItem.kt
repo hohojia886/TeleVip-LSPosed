@@ -1,4 +1,4 @@
-package com.my.televip.Configs
+package com.my.televip.configs
 
 class ConfigItem {
 

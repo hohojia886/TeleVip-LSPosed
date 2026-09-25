@@ -1,8 +1,8 @@
 package com.my.televip.features.other
 
 import android.app.Activity
-import com.my.televip.Class.ClassLoad
-import com.my.televip.Class.ClassNames
+import com.my.televip.clazz.ClassLoad
+import com.my.televip.clazz.ClassNames
 import com.my.televip.application.ApplicationLoaderHook
 import com.my.televip.hooks.HMethod
 import com.my.televip.logging.Logger

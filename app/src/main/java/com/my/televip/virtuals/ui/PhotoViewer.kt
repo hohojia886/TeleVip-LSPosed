@@ -2,8 +2,8 @@ package com.my.televip.virtuals.ui
 
 import android.app.Activity
 import android.view.View
-import com.my.televip.Class.ClassLoad
-import com.my.televip.Class.ClassNames
+import com.my.televip.clazz.ClassLoad
+import com.my.televip.clazz.ClassNames
 import com.my.televip.obfuscate.Obfuscate
 import com.my.televip.virtuals.messenger.ImageReceiver
 import de.robv.android.xposed.XposedHelpers

@@ -3,7 +3,7 @@ package com.my.televip.settings.controller
 import android.content.Context
 import android.view.View
 import android.widget.FrameLayout
-import com.my.televip.Configs.ConfigPreferences
+import com.my.televip.configs.ConfigPreferences
 import com.my.televip.language.Keys
 import com.my.televip.language.Translator
 import com.my.televip.logging.Logger

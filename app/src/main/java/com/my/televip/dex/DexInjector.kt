@@ -1,6 +1,6 @@
 package com.my.televip.dex
 
-import com.my.televip.Clients.ClientManager
+import com.my.televip.clients.ClientManager
 import com.my.televip.logging.Logger
 import dalvik.system.InMemoryDexClassLoader
 import java.nio.ByteBuffer

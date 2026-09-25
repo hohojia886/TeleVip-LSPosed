@@ -1,6 +1,6 @@
 package com.my.televip.obfuscate
 
-import com.my.televip.Clients.ClientManager
+import com.my.televip.clients.ClientManager
 import com.my.televip.obfuscate.struct.ClientObfuscationData
 import com.my.televip.utils.JsonAssetReader
 import java.util.EnumMap

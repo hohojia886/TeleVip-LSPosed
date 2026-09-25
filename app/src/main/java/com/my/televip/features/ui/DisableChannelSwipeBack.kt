@@ -1,9 +1,9 @@
 package com.my.televip.features.ui
 
 import android.view.MotionEvent
-import com.my.televip.Class.ClassLoad
-import com.my.televip.Class.ClassNames
-import com.my.televip.Configs.ConfigManager
+import com.my.televip.clazz.ClassLoad
+import com.my.televip.clazz.ClassNames
+import com.my.televip.configs.ConfigManager
 import com.my.televip.base.BaseMethodHook
 import com.my.televip.logging.Logger
 import com.my.televip.obfuscate.ArgsResolver

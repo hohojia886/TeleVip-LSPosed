@@ -1,7 +1,7 @@
 package com.my.televip.virtuals.tgnet
 
-import com.my.televip.Class.ClassLoad
-import com.my.televip.Class.ClassNames
+import com.my.televip.clazz.ClassLoad
+import com.my.televip.clazz.ClassNames
 import com.my.televip.obfuscate.Obfuscate
 import de.robv.android.xposed.XposedHelpers
 

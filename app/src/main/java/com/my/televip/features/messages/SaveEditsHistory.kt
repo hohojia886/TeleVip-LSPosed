@@ -3,11 +3,11 @@ package com.my.televip.features.messages
 import android.text.method.ScrollingMovementMethod
 import android.widget.ScrollView
 import android.widget.TextView
-import com.my.televip.Class.ClassLoad
-import com.my.televip.Class.ClassNames
-import com.my.televip.Clients.ClientManager
-import com.my.televip.Configs.ConfigManager
-import com.my.televip.Database.MessageDatabase
+import com.my.televip.clazz.ClassLoad
+import com.my.televip.clazz.ClassNames
+import com.my.televip.clients.ClientManager
+import com.my.televip.configs.ConfigManager
+import com.my.televip.database.MessageDatabase
 import com.my.televip.base.BaseMethodHook
 import com.my.televip.calendar.ConverterCalendar
 import com.my.televip.language.Keys

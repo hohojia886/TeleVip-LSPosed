@@ -1,4 +1,4 @@
-package com.my.televip.Configs
+package com.my.televip.configs
 
 import android.app.Activity
 import android.content.SharedPreferences

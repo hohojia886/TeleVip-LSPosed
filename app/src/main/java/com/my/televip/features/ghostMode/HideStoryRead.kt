@@ -1,8 +1,8 @@
 package com.my.televip.features.ghostMode
 
-import com.my.televip.Class.ClassLoad
-import com.my.televip.Class.ClassNames
-import com.my.televip.Clients.ClientManager
+import com.my.televip.clazz.ClassLoad
+import com.my.televip.clazz.ClassNames
+import com.my.televip.clients.ClientManager
 import com.my.televip.obfuscate.Obfuscate
 
 object HideStoryRead {

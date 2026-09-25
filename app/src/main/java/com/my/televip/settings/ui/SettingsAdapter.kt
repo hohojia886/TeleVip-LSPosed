@@ -5,9 +5,9 @@ import android.content.Context
 import android.media.MediaPlayer
 import androidx.recyclerview.widget.RecyclerView
 import com.my.televip.Audio
-import com.my.televip.Class.ClassLoad
-import com.my.televip.Class.ClassNames
-import com.my.televip.Configs.ConfigManager
+import com.my.televip.clazz.ClassLoad
+import com.my.televip.clazz.ClassNames
+import com.my.televip.configs.ConfigManager
 import com.my.televip.language.Translator
 import com.my.televip.settings.controller.SettingsController
 import com.my.televip.ui.ThemeColors

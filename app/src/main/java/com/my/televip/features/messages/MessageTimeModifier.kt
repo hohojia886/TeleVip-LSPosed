@@ -4,9 +4,9 @@ import android.graphics.Color
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
-import com.my.televip.Class.ClassLoad
-import com.my.televip.Class.ClassNames
-import com.my.televip.Configs.ConfigManager
+import com.my.televip.clazz.ClassLoad
+import com.my.televip.clazz.ClassNames
+import com.my.televip.configs.ConfigManager
 import com.my.televip.base.BaseMethodHook
 import com.my.televip.hooks.HMethod
 import com.my.televip.language.Keys

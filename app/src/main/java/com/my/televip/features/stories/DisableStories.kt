@@ -1,9 +1,9 @@
 package com.my.televip.features.stories
 
-import com.my.televip.Class.ClassLoad
-import com.my.televip.Class.ClassNames
-import com.my.televip.Clients.ClientManager
-import com.my.televip.Configs.ConfigManager
+import com.my.televip.clazz.ClassLoad
+import com.my.televip.clazz.ClassNames
+import com.my.televip.clients.ClientManager
+import com.my.televip.configs.ConfigManager
 import com.my.televip.base.BaseMethodHook
 import com.my.televip.hooks.HMethod
 import com.my.televip.logging.Logger

@@ -1,6 +1,6 @@
 package com.my.televip.hooks
 
-import com.my.televip.Class.ClassLoad
+import com.my.televip.clazz.ClassLoad
 import com.my.televip.base.BaseMethodHook
 import com.my.televip.logging.Logger
 import com.my.televip.obfuscate.Obfuscate

@@ -1,4 +1,4 @@
-package com.my.televip.Drawable
+package com.my.televip.drawable
 
 import android.graphics.Canvas
 import android.graphics.ColorFilter

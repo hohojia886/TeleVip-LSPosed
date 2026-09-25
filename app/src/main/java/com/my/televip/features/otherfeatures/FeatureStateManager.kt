@@ -1,6 +1,6 @@
-package com.my.televip.features.otherFeatures
+package com.my.televip.features.otherfeatures
 
-import com.my.televip.Configs.ConfigPreferences
+import com.my.televip.configs.ConfigPreferences
 
 object FeatureStateManager {
 

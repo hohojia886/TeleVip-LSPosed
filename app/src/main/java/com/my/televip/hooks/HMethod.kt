@@ -1,6 +1,6 @@
 package com.my.televip.hooks
 
-import com.my.televip.Clients.ClientManager
+import com.my.televip.clients.ClientManager
 import com.my.televip.base.BaseMethodHook
 import com.my.televip.logging.Logger
 import com.my.televip.obfuscate.Obfuscate

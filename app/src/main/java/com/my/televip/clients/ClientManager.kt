@@ -1,7 +1,7 @@
-package com.my.televip.Clients
+package com.my.televip.clients
 
-import com.my.televip.Class.ClassLoad
-import com.my.televip.Class.ClassNames
+import com.my.televip.clazz.ClassLoad
+import com.my.televip.clazz.ClassNames
 import com.my.televip.utils.Utils
 
 object ClientManager {
@@ -15,8 +15,8 @@ object ClientManager {
         TelegramWeb("org.telegram.messenger.web"),
         TelegramPlus("org.telegram.plus"),
         TGConnect("com.tgconnect.android"),
-        Nagram("xyz.nextalone.nagram", resolverClassName = "com.my.televip.Clients.Nagram"),
-        Nicegram("app.nicegram", resolverClassName = "com.my.televip.Clients.Nicegram"),
+        Nagram("xyz.nextalone.nagram", resolverClassName = "com.my.televip.clients.Nagram"),
+        Nicegram("app.nicegram", resolverClassName = "com.my.televip.clients.Nicegram"),
         TelegramBeta("org.telegram.messenger.beta"),
         NagramX("nu.gpu.nagram"),
         XPlus("com.xplus.messenger"),
@@ -24,13 +24,13 @@ object ClientManager {
         iMeWeb("com.iMe.android.web"),
         forkgram("org.forkgram.messenger"),
         forkgramBeta("org.forkclient.messenger.beta"),
-        Telegraph("ir.ilmili.telegraph", resolverClassName = "com.my.televip.Clients.Telegraph"),
+        Telegraph("ir.ilmili.telegraph", resolverClassName = "com.my.televip.clients.Telegraph"),
         Telega("ru.dahl.messenger"),
-        Momogram("nekox.messenger.broken", resolverClassName = "com.my.televip.Clients.Momogram"),
+        Momogram("nekox.messenger.broken", resolverClassName = "com.my.televip.clients.Momogram"),
         Nekogram("tw.nekomimi.nekogram", isTgnetObfuscated = true),
         Cherrygram("uz.unnarsx.cherrygram", isTgnetObfuscated = true),
         ForkgramClassic("org.forkgram.classic"),
-        Turrit("org.telegram.group", resolverClassName = "com.my.televip.Clients.Turrit"),
+        Turrit("org.telegram.group", resolverClassName = "com.my.televip.clients.Turrit"),
         NagramXF("fork.risin42.nagramx");
 
         val resolverClass: Class<*>?

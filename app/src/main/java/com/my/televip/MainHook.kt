@@ -2,9 +2,9 @@ package com.my.televip
 
 import android.app.Activity
 import android.os.Bundle
-import com.my.televip.Class.ClassLoad
-import com.my.televip.Class.ClassNames
-import com.my.televip.Clients.ClientManager
+import com.my.televip.clazz.ClassLoad
+import com.my.televip.clazz.ClassNames
+import com.my.televip.clients.ClientManager
 import com.my.televip.base.BaseMethodHook
 import com.my.televip.hooks.HMethod
 import com.my.televip.utils.Utils

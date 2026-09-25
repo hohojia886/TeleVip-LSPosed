@@ -1,10 +1,10 @@
-package com.my.televip.Clients
+package com.my.televip.clients
 
-import com.my.televip.Class.ClassLoad
-import com.my.televip.Class.ClassNames
+import com.my.televip.clazz.ClassLoad
+import com.my.televip.clazz.ClassNames
 import java.util.ArrayList
 
-object Momogram {
+object Nicegram {
 
     object ParameterResolver {
         private val objectList: MutableMap<String, Array<Class<*>?>?> = HashMap()

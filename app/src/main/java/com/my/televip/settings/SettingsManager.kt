@@ -1,7 +1,7 @@
 package com.my.televip.settings
 
-import com.my.televip.Clients.ClientManager
-import com.my.televip.Clients.Turrit
+import com.my.televip.clients.ClientManager
+import com.my.televip.clients.Turrit
 import com.my.televip.obfuscate.Obfuscate
 import com.my.televip.settings.controller.SettingsController
 import com.my.televip.settings.hook.SettingsHook

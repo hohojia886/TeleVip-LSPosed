@@ -1,4 +1,4 @@
-package com.my.televip.Class
+package com.my.televip.clazz
 
 object ClassNames {
     const val MESSAGE_OBJECT = "org.telegram.messenger.MessageObject"

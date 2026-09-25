@@ -1,7 +1,7 @@
-package com.my.televip.Configs
+package com.my.televip.configs
 
-import com.my.televip.Clients.ClientManager
-import com.my.televip.Clients.Telegraph
+import com.my.televip.clients.ClientManager
+import com.my.televip.clients.Telegraph
 import com.my.televip.features.connections.DownloadSpeed
 import com.my.televip.features.ghostMode.GhostMode
 import com.my.televip.features.ghostMode.HidePhone
@@ -16,10 +16,10 @@ import com.my.televip.features.other.FixTLError
 import com.my.televip.features.other.HideUpdateApp
 import com.my.televip.features.other.RemovesContentSaving
 import com.my.televip.features.other.TelePremium
-import com.my.televip.features.otherFeatures.AlwaysSaveMedia
-import com.my.televip.features.otherFeatures.CopyNameHook
-import com.my.televip.features.otherFeatures.EditOnlineTextView
-import com.my.televip.features.otherFeatures.FeatureInitializer
+import com.my.televip.features.otherfeatures.AlwaysSaveMedia
+import com.my.televip.features.otherfeatures.CopyNameHook
+import com.my.televip.features.otherfeatures.EditOnlineTextView
+import com.my.televip.features.otherfeatures.FeatureInitializer
 import com.my.televip.features.stories.DisableStories
 import com.my.televip.features.ui.DisableChannelSwipeBack
 import com.my.televip.features.ui.DisableNumberRounding
